@@ -4,15 +4,75 @@ using static Define;
 
 public class PlayerController : MonoBehaviour
 {
+    private Grid _grid;
+    private Animator _animator;
+
     [SerializeField] private float moveSpeed = 5f;
 
-    private MoveDir _dir = MoveDir.None;
+    private MoveDir _dir = MoveDir.Down;
+
+    public MoveDir Dir
+    {
+        get => _dir;
+        set
+        {
+            if (_dir == value)
+            {
+                return;
+            }
+
+            switch (value)
+            {
+                case MoveDir.None:
+                    switch (_dir)
+                    {
+                        case MoveDir.Up:
+                            _animator.Play("IdleBack");
+                            transform.localScale = new Vector3(1f, 1f, 1f);
+                            break;
+                        case MoveDir.Down:
+                            _animator.Play("IdleFront");
+                            transform.localScale = new Vector3(1f, 1f, 1f);
+                            break;
+                        case MoveDir.Left:
+                            _animator.Play("IdleRight");
+                            transform.localScale = new Vector3(-1f, 1f, 1f);
+                            break;
+                        case MoveDir.Right:
+                            _animator.Play("IdleRight");
+                            transform.localScale = new Vector3(1f, 1f, 1f);
+                            break;
+                    }
+                    break;
+                case MoveDir.Up:
+                    _animator.Play("WalkBack");
+                    transform.localScale = new Vector3(1f, 1f, 1f);
+                    break;
+                case MoveDir.Down:
+                    _animator.Play("WalkFront");
+                    transform.localScale = new Vector3(1f, 1f, 1f);
+                    break;
+                case MoveDir.Left:
+                    _animator.Play("WalkRight");
+                    transform.localScale = new Vector3(-1f, 1f, 1f);
+                    break;
+                case MoveDir.Right:
+                    _animator.Play("WalkRight");
+                    transform.localScale = new Vector3(1f, 1f, 1f);
+                    break;
+            }
+
+            _dir = value;
+        }
+    }
 
     private Vector3Int _cellPos = Vector3Int.zero;
     private bool _isMoving = false;
 
-    //
-    private Grid _grid;
+    private void Awake()
+    {
+        _animator = GetComponent<Animator>();
+    }
 
     private void Start()
     {
@@ -33,23 +93,23 @@ public class PlayerController : MonoBehaviour
     {
         if (Input.GetKey(KeyCode.W))
         {
-            _dir = MoveDir.Up;
+            Dir = MoveDir.Up;
         }
         else if (Input.GetKey(KeyCode.S))
         {
-            _dir = MoveDir.Down;
+            Dir = MoveDir.Down;
         }
         else if (Input.GetKey(KeyCode.A))
         {
-            _dir = MoveDir.Left;
+            Dir = MoveDir.Left;
         }
         else if (Input.GetKey(KeyCode.D))
         {
-            _dir = MoveDir.Right;
+            Dir = MoveDir.Right;
         }
         else
         {
-            _dir = MoveDir.None;
+            Dir = MoveDir.None;
         }
     }
 
