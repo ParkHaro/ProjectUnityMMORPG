@@ -19,7 +19,7 @@ public class MapManager
             return false;
         }
 
-        if (cellPos.x < MinY || cellPos.y > MaxY)
+        if (cellPos.y < MinY || cellPos.y > MaxY)
         {
             return false;
         }
