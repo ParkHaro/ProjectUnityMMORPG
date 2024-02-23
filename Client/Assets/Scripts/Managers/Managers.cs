@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Playables;
 
 public class Managers : MonoBehaviour
 {
@@ -8,6 +9,11 @@ public class Managers : MonoBehaviour
     static Managers Instance { get { Init(); return s_instance; } } // 유일한 매니저를 갖고온다
 
 	#region Contents
+
+	private MapManager _map = new();
+	
+	public static MapManager Map => Instance._map;
+
 	#endregion
 
 	#region Core
@@ -18,13 +24,14 @@ public class Managers : MonoBehaviour
     SoundManager _sound = new SoundManager();
     UIManager _ui = new UIManager();
 
-    public static DataManager Data { get { return Instance._data; } }
-    public static PoolManager Pool { get { return Instance._pool; } }
-    public static ResourceManager Resource { get { return Instance._resource; } }
-    public static SceneManagerEx Scene { get { return Instance._scene; } }
-    public static SoundManager Sound { get { return Instance._sound; } }
-    public static UIManager UI { get { return Instance._ui; } }
-	#endregion
+    public static DataManager Data => Instance._data;
+    public static PoolManager Pool => Instance._pool;
+    public static ResourceManager Resource => Instance._resource;
+    public static SceneManagerEx Scene => Instance._scene;
+    public static SoundManager Sound => Instance._sound;
+    public static UIManager UI => Instance._ui;
+
+    #endregion
 
 	void Start()
     {

@@ -43,6 +43,7 @@ public class PlayerController : MonoBehaviour
                             transform.localScale = new Vector3(1f, 1f, 1f);
                             break;
                     }
+
                     break;
                 case MoveDir.Up:
                     _animator.Play("WalkBack");
@@ -76,10 +77,11 @@ public class PlayerController : MonoBehaviour
 
     private void Start()
     {
-        _grid = FindObjectOfType<Grid>();
+        // _grid = Managers.Map.CurrentGrid;
 
-        var pos = _grid.CellToWorld(_cellPos) + new Vector3(0.5f, 0.5f);
-        transform.position = pos;
+        UpdatePosition();
+        // var pos = Managers.Map.CurrentGrid.CellToWorld(_cellPos) + new Vector3(0.5f, 0.5f);
+        // transform.position = pos;
     }
 
     private void Update()
@@ -87,6 +89,12 @@ public class PlayerController : MonoBehaviour
         GetDirInput();
         UpdatePosition();
         UpdateIsMoving();
+    }
+
+    private void LateUpdate()
+    {
+        Camera.main.transform.position =
+            new Vector3(transform.position.x, transform.position.y, Camera.main.transform.position.z);
     }
 
     private void GetDirInput()
@@ -115,13 +123,13 @@ public class PlayerController : MonoBehaviour
 
     private void UpdatePosition()
     {
-        var destPos = _grid.CellToWorld(_cellPos) + new Vector3(0.5f, 0.5f);
+        var destPos = Managers.Map.CurrentGrid.CellToWorld(_cellPos) + new Vector3(0.5f, 0.5f);
         var moveDir = destPos - transform.position;
-        
+
         // 도착 여부 체크
         var dist = moveDir.magnitude;
         moveDir.Normalize();
-        
+
         if (dist < moveSpeed * Time.deltaTime)
         {
             transform.position = destPos;
@@ -136,26 +144,30 @@ public class PlayerController : MonoBehaviour
 
     private void UpdateIsMoving()
     {
-        if (_isMoving == false)
+        if (_isMoving == false && _dir != MoveDir.None)
         {
+            Vector3Int destPos = _cellPos;
+
             switch (_dir)
             {
                 case MoveDir.Up:
-                    _cellPos += Vector3Int.up;
-                    _isMoving = true;
+                    destPos += Vector3Int.up;
                     break;
                 case MoveDir.Down:
-                    _cellPos += Vector3Int.down;
-                    _isMoving = true;
+                    destPos += Vector3Int.down;
                     break;
                 case MoveDir.Left:
-                    _cellPos += Vector3Int.left;
-                    _isMoving = true;
+                    destPos += Vector3Int.left;
                     break;
                 case MoveDir.Right:
-                    _cellPos += Vector3Int.right;
-                    _isMoving = true;
+                    destPos += Vector3Int.right;
                     break;
+            }
+
+            if (Managers.Map.CanGo(destPos))
+            {
+                _cellPos = destPos;
+                _isMoving = true;
             }
         }
     }

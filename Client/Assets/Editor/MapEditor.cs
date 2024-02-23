@@ -18,20 +18,21 @@ public class MapEditor
         
         foreach (var go in gameObjects)
         {
-            var tilemap = Util.FindChild<Tilemap>(go, "TilemapCollision", true);
+            var tilemapBase = Util.FindChild<Tilemap>(go, "TilemapBase", true);
+            var tilemapCollision = Util.FindChild<Tilemap>(go, "TilemapCollision", true);
 
             using var writer = File.CreateText($"Assets/Resources/Map/{go.name}.txt");
-            writer.WriteLine(tilemap.cellBounds.xMin);
-            writer.WriteLine(tilemap.cellBounds.xMax);
-            writer.WriteLine(tilemap.cellBounds.yMin);
-            writer.WriteLine(tilemap.cellBounds.yMax);
+            writer.WriteLine(tilemapBase.cellBounds.xMin);
+            writer.WriteLine(tilemapBase.cellBounds.xMax);
+            writer.WriteLine(tilemapBase.cellBounds.yMin);
+            writer.WriteLine(tilemapBase.cellBounds.yMax);
         
 
-            for (int y = tilemap.cellBounds.yMax; y >= tilemap.cellBounds.yMin; y--)
+            for (int y = tilemapBase.cellBounds.yMax; y >= tilemapBase.cellBounds.yMin; y--)
             {
-                for (int x = tilemap.cellBounds.xMin; x <= tilemap.cellBounds.xMax; x++)
+                for (int x = tilemapBase.cellBounds.xMin; x <= tilemapBase.cellBounds.xMax; x++)
                 {
-                    var tile = tilemap.GetTile(new Vector3Int(x, y, 0));
+                    var tile = tilemapCollision.GetTile(new Vector3Int(x, y, 0));
                     writer.Write(tile != null ? "1" : "0");
                 }
                 writer.WriteLine();
