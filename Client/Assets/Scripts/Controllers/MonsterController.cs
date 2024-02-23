@@ -1,43 +1,42 @@
 ﻿using UnityEngine;
 using static Define;
 
-namespace Controllers
+public class MonsterController : CreatureController
 {
-    public class MonsterController : CreatureController
+    protected override void Init()
     {
-        protected override void Init()
-        {
-            base.Init();
-        }
+        base.Init();
+        State = CreatureState.Idle;
+        Dir = MoveDir.None;
+    }
 
-        protected override void UpdateController()
-        {
-            // GetDirInput();
-            base.UpdateController();
-        }
+    protected override void UpdateController()
+    {
+        // GetDirInput();
+        base.UpdateController();
+    }
 
-        private void GetDirInput()
+    private void GetDirInput()
+    {
+        if (Input.GetKey(KeyCode.W))
         {
-            if (Input.GetKey(KeyCode.W))
-            {
-                Dir = MoveDir.Up;
-            }
-            else if (Input.GetKey(KeyCode.S))
-            {
-                Dir = MoveDir.Down;
-            }
-            else if (Input.GetKey(KeyCode.A))
-            {
-                Dir = MoveDir.Left;
-            }
-            else if (Input.GetKey(KeyCode.D))
-            {
-                Dir = MoveDir.Right;
-            }
-            else
-            {
-                Dir = MoveDir.None;
-            }
+            Dir = MoveDir.Up;
+        }
+        else if (Input.GetKey(KeyCode.S))
+        {
+            Dir = MoveDir.Down;
+        }
+        else if (Input.GetKey(KeyCode.A))
+        {
+            Dir = MoveDir.Left;
+        }
+        else if (Input.GetKey(KeyCode.D))
+        {
+            Dir = MoveDir.Right;
+        }
+        else
+        {
+            Dir = MoveDir.None;
         }
     }
 }
