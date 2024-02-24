@@ -183,8 +183,10 @@ public class CreatureController : MonoBehaviour
                 UpdateMoving();
                 break;
             case CreatureState.Skill:
+                UpdateSkill();
                 break;
             case CreatureState.Dead:
+                UpdateDead();
                 break;
         }
     }
@@ -250,5 +252,20 @@ public class CreatureController : MonoBehaviour
             transform.position += moveDir * (moveSpeed * Time.deltaTime);
             State = CreatureState.Moving;
         }
+    }
+
+    public virtual void UpdateSkill()
+    {
+        
+    }
+
+    public virtual void UpdateDead()
+    {
+        
+    }
+
+    public virtual void OnDamaged()
+    {
+        
     }
 }
