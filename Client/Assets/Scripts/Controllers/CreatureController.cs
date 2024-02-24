@@ -12,7 +12,7 @@ public class CreatureController : MonoBehaviour
 
     protected CreatureState _state = CreatureState.Idle;
 
-    public CreatureState State
+    public virtual CreatureState State
     {
         get => _state;
         set
@@ -196,16 +196,13 @@ public class CreatureController : MonoBehaviour
 
     protected virtual void UpdateMoving()
     {
-        Debug.Log("UpdateMoving");
         var destPos = Managers.Map.CurrentGrid.CellToWorld(CellPos) + new Vector3(0.5f, 0.5f);
         var moveDir = destPos - transform.position;
         
         // 도착 여부 체크
         var dist = moveDir.magnitude;
         moveDir.Normalize();
-
-        Debug.Log(moveDir);
-
+        
         if (dist < moveSpeed * Time.deltaTime)
         {
             transform.position = destPos;

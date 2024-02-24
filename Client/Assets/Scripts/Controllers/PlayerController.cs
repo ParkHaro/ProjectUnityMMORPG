@@ -136,7 +136,6 @@ public class PlayerController : CreatureController
 
     protected override void UpdateIdle()
     {
-        Debug.Log(Dir);
         if (Dir != MoveDir.None)
         {
             State = CreatureState.Moving;
