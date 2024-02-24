@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class ObjectManager
@@ -13,11 +14,6 @@ public class ObjectManager
     public void Remove(GameObject go)
     {
         _objects.Remove(go);
-    }
-
-    public void Clear()
-    {
-        _objects.Clear();
     }
 
     public GameObject Find(Vector3Int cellPos)
@@ -37,5 +33,23 @@ public class ObjectManager
         }
 
         return null;
+    }
+
+    public GameObject Find(Func<GameObject, bool> condition)
+    {
+        foreach (var obj in _objects)
+        {
+            if (condition.Invoke(obj))
+            {
+                return obj;
+            }
+        }
+
+        return null;
+    }
+
+    public void Clear()
+    {
+        _objects.Clear();
     }
 }

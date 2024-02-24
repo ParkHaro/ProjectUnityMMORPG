@@ -1,5 +1,4 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 using static Define;
 
 public class CreatureController : MonoBehaviour
@@ -10,41 +9,41 @@ public class CreatureController : MonoBehaviour
     protected SpriteRenderer _spriteRenderer;
     public Vector3Int CellPos { get; set; } = Vector3Int.zero;
 
-    protected CreatureState _state = CreatureState.Idle;
+    [SerializeField] protected CreatureState state = CreatureState.Idle;
 
     public virtual CreatureState State
     {
-        get => _state;
+        get => state;
         set
         {
-            if (_state == value)
+            if (state == value)
             {
                 return;
             }
 
-            _state = value;
+            state = value;
 
             UpdateAnimation();
         }
     }
 
     protected MoveDir _lastDir = MoveDir.Down;
-    protected MoveDir _dir = MoveDir.Down;
+    [SerializeField] protected MoveDir dir = MoveDir.Down;
 
     public MoveDir Dir
     {
-        get => _dir;
+        get => dir;
         set
         {
-            if (_dir == value)
+            if (dir == value)
             {
                 return;
             }
 
-            _dir = value;
-            if (_dir != MoveDir.None)
+            dir = value;
+            if (dir != MoveDir.None)
             {
-                _lastDir = _dir;
+                _lastDir = dir;
             }
 
             UpdateAnimation();
@@ -103,7 +102,7 @@ public class CreatureController : MonoBehaviour
                 break;
             case CreatureState.Moving:
             {
-                switch (_dir)
+                switch (dir)
                 {
                     case MoveDir.Up:
                         _animator.Play("WalkBack");
@@ -191,18 +190,17 @@ public class CreatureController : MonoBehaviour
 
     protected virtual void UpdateIdle()
     {
-        
     }
 
     protected virtual void UpdateMoving()
     {
         var destPos = Managers.Map.CurrentGrid.CellToWorld(CellPos) + new Vector3(0.5f, 0.5f);
         var moveDir = destPos - transform.position;
-        
+
         // 도착 여부 체크
         var dist = moveDir.magnitude;
         moveDir.Normalize();
-        
+
         if (dist < moveSpeed * Time.deltaTime)
         {
             transform.position = destPos;
@@ -217,7 +215,7 @@ public class CreatureController : MonoBehaviour
 
     protected virtual void MoveToNextPos()
     {
-        if (_dir == MoveDir.None)
+        if (dir == MoveDir.None)
         {
             State = CreatureState.Idle;
             return;
@@ -225,7 +223,7 @@ public class CreatureController : MonoBehaviour
 
         Vector3Int destPos = CellPos;
 
-        switch (_dir)
+        switch (dir)
         {
             case MoveDir.Up:
                 destPos += Vector3Int.up;

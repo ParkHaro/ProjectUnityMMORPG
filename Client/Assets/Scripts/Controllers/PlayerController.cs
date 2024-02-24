@@ -41,7 +41,7 @@ public class PlayerController : CreatureController
                 break;
             case CreatureState.Moving:
             {
-                switch (_dir)
+                switch (dir)
                 {
                     case MoveDir.Up:
                         _animator.Play("WalkBack");

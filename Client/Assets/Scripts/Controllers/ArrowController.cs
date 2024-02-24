@@ -34,11 +34,11 @@ public class ArrowController : CreatureController
 
     protected override void MoveToNextPos()
     {
-        if (_dir != MoveDir.None)
+        if (dir != MoveDir.None)
         {
             Vector3Int destPos = CellPos;
 
-            switch (_dir)
+            switch (dir)
             {
                 case MoveDir.Up:
                     destPos += Vector3Int.up;
