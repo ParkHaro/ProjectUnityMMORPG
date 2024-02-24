@@ -6,11 +6,15 @@ public class MonsterController : CreatureController
 {
     private Coroutine _patrolRoutine;
     private Coroutine _searchRoutine;
-    
+    private Coroutine _skillRoutine;
+
     [SerializeField] private Vector3Int destCellPos;
     [SerializeField] private GameObject target;
 
-    [SerializeField] private float searchRange = 5f;
+    [SerializeField] private float searchRange = 10f;
+    [SerializeField] private float skillRange = 1f;
+
+    [SerializeField] private bool isRangedSkill;
 
     public override CreatureState State
     {
@@ -38,6 +42,9 @@ public class MonsterController : CreatureController
         Dir = MoveDir.None;
 
         moveSpeed = 3f;
+        isRangedSkill = Random.Range(0, 2) == 0;
+
+        skillRange = isRangedSkill ? 10f : 1f;
     }
 
     protected override void UpdateIdle()
@@ -61,10 +68,28 @@ public class MonsterController : CreatureController
         if (target != null)
         {
             destPos = target.GetComponent<CreatureController>().CellPos;
+
+            var dir = destPos - CellPos;
+            if (dir.magnitude <= skillRange && (dir.x == 0 || dir.y == 0))
+            {
+                Dir = GetDirFromVec(dir);
+                State = CreatureState.Skill;
+
+                if (isRangedSkill)
+                {
+                    _skillRoutine = StartCoroutine(CoStartShootArrow());
+                }
+                else
+                {
+                    _skillRoutine = StartCoroutine(CoStartPunch());
+                }
+                
+                return;
+            }
         }
 
         var path = Managers.Map.FindPath(CellPos, destPos, ignoreDestCollision: true);
-        if (path.Count < 2 || (target != null &&  path.Count > 10))
+        if (path.Count < 2 || (target != null && path.Count > 20))
         {
             target = null;
             State = CreatureState.Idle;
@@ -73,26 +98,7 @@ public class MonsterController : CreatureController
 
         Vector3Int nextPos = path[1];
         var moveCellDir = nextPos - CellPos;
-        if (moveCellDir.x > 0)
-        {
-            Dir = MoveDir.Right;
-        }
-        else if (moveCellDir.x < 0)
-        {
-            Dir = MoveDir.Left;
-        }
-        else if (moveCellDir.y > 0)
-        {
-            Dir = MoveDir.Up;
-        }
-        else if (moveCellDir.y < 0)
-        {
-            Dir = MoveDir.Down;
-        }
-        else
-        {
-            Dir = MoveDir.None;
-        }
+        Dir = GetDirFromVec(moveCellDir);
 
         if (Managers.Map.CanGo(nextPos) && Managers.Object.Find(nextPos) == null)
         {
@@ -166,5 +172,34 @@ public class MonsterController : CreatureController
                 return true;
             });
         }
+    }
+
+    private IEnumerator CoStartPunch()
+    {
+        var go = Managers.Object.Find(GetFrontCellPos());
+        if (go != null)
+        {
+            var creatureController = go.GetComponent<CreatureController>();
+            if (creatureController != null)
+            {
+                creatureController.OnDamaged();
+            }
+        }
+
+        yield return new WaitForSeconds(0.5f);
+        State = CreatureState.Moving;
+        _skillRoutine = null;
+    }
+
+    private IEnumerator CoStartShootArrow()
+    {
+        var go = Managers.Resource.Instantiate("Creature/Arrow");
+        var arrowController = go.GetComponent<ArrowController>();
+        arrowController.Dir = _lastDir;
+        arrowController.CellPos = CellPos;
+
+        yield return new WaitForSeconds(0.3f);
+        State = CreatureState.Idle;
+        _skillRoutine = null;
     }
 }

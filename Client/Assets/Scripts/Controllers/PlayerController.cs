@@ -4,7 +4,7 @@ using static Define;
 
 public class PlayerController : CreatureController
 {
-    private Coroutine skillRoutine;
+    private Coroutine _skillRoutine;
     private bool _isRangedSkill;
 
     protected override void Init()
@@ -145,8 +145,8 @@ public class PlayerController : CreatureController
         if (Input.GetKey(KeyCode.Space))
         {
             State = CreatureState.Skill;
-            // skillRoutine = StartCoroutine(CoStartPunch());
-            skillRoutine = StartCoroutine(CoStartShootArrow());
+            // _skillRoutine = StartCoroutine(CoStartPunch());
+            _skillRoutine = StartCoroutine(CoStartShootArrow());
         }
     }
     
@@ -155,13 +155,17 @@ public class PlayerController : CreatureController
         var go = Managers.Object.Find(GetFrontCellPos());
         if (go != null)
         {
-            Debug.Log(go.name);
+            var creatureController = go.GetComponent<CreatureController>();
+            if (creatureController != null)
+            {
+                creatureController.OnDamaged();
+            }
         }
 
         _isRangedSkill = false;
         yield return new WaitForSeconds(0.5f);
         State = CreatureState.Idle;
-        skillRoutine = null;
+        _skillRoutine = null;
     }
 
     private IEnumerator CoStartShootArrow()
@@ -174,6 +178,6 @@ public class PlayerController : CreatureController
         _isRangedSkill = true;
         yield return new WaitForSeconds(0.3f);
         State = CreatureState.Idle;
-        skillRoutine = null;
+        _skillRoutine = null;
     }
 }
