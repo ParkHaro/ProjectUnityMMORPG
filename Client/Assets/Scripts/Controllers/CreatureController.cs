@@ -4,7 +4,7 @@ using static Define;
 
 public class CreatureController : MonoBehaviour
 {
-    [SerializeField] private float moveSpeed = 5f;
+    [SerializeField] protected float moveSpeed = 5f;
 
     protected Animator _animator;
     protected SpriteRenderer _spriteRenderer;
@@ -163,8 +163,6 @@ public class CreatureController : MonoBehaviour
 
         var initPos = Managers.Map.CurrentGrid.CellToWorld(CellPos) + new Vector3(0.5f, 0.5f);
         transform.position = initPos;
-
-        UpdateMoving();
     }
 
     private void Update()
@@ -193,59 +191,25 @@ public class CreatureController : MonoBehaviour
 
     protected virtual void UpdateIdle()
     {
-        if (_dir != MoveDir.None)
-        {
-            Vector3Int destPos = CellPos;
-
-            switch (_dir)
-            {
-                case MoveDir.Up:
-                    destPos += Vector3Int.up;
-                    break;
-                case MoveDir.Down:
-                    destPos += Vector3Int.down;
-                    break;
-                case MoveDir.Left:
-                    destPos += Vector3Int.left;
-                    break;
-                case MoveDir.Right:
-                    destPos += Vector3Int.right;
-                    break;
-            }
-
-            State = CreatureState.Moving;
-            if (Managers.Map.CanGo(destPos))
-            {
-                if (Managers.Object.Find(destPos) == null)
-                {
-                    CellPos = destPos;
-                }
-            }
-        }
+        
     }
 
     protected virtual void UpdateMoving()
     {
+        Debug.Log("UpdateMoving");
         var destPos = Managers.Map.CurrentGrid.CellToWorld(CellPos) + new Vector3(0.5f, 0.5f);
         var moveDir = destPos - transform.position;
-
-        if (State != CreatureState.Moving)
-        {
-            return;
-        }
-
+        
         // 도착 여부 체크
         var dist = moveDir.magnitude;
         moveDir.Normalize();
 
+        Debug.Log(moveDir);
+
         if (dist < moveSpeed * Time.deltaTime)
         {
             transform.position = destPos;
-            _state = CreatureState.Idle;
-            if (_dir == MoveDir.None)
-            {
-                UpdateAnimation();
-            }
+            MoveToNextPos();
         }
         else
         {
@@ -254,18 +218,50 @@ public class CreatureController : MonoBehaviour
         }
     }
 
+    protected virtual void MoveToNextPos()
+    {
+        if (_dir == MoveDir.None)
+        {
+            State = CreatureState.Idle;
+            return;
+        }
+
+        Vector3Int destPos = CellPos;
+
+        switch (_dir)
+        {
+            case MoveDir.Up:
+                destPos += Vector3Int.up;
+                break;
+            case MoveDir.Down:
+                destPos += Vector3Int.down;
+                break;
+            case MoveDir.Left:
+                destPos += Vector3Int.left;
+                break;
+            case MoveDir.Right:
+                destPos += Vector3Int.right;
+                break;
+        }
+
+        if (Managers.Map.CanGo(destPos))
+        {
+            if (Managers.Object.Find(destPos) == null)
+            {
+                CellPos = destPos;
+            }
+        }
+    }
+
     public virtual void UpdateSkill()
     {
-        
     }
 
     public virtual void UpdateDead()
     {
-        
     }
 
     public virtual void OnDamaged()
     {
-        
     }
 }

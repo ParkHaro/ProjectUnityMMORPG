@@ -95,7 +95,6 @@ public class PlayerController : CreatureController
         {
             case CreatureState.Idle:
                 GetDirInput();
-                GetIdleInput();
                 break;
             case CreatureState.Moving:
                 GetDirInput();
@@ -110,9 +109,40 @@ public class PlayerController : CreatureController
         Camera.main.transform.position =
             new Vector3(transform.position.x, transform.position.y, Camera.main.transform.position.z);
     }
-
-    private void GetIdleInput()
+    
+    private void GetDirInput()
     {
+        if (Input.GetKey(KeyCode.W))
+        {
+            Dir = MoveDir.Up;
+        }
+        else if (Input.GetKey(KeyCode.S))
+        {
+            Dir = MoveDir.Down;
+        }
+        else if (Input.GetKey(KeyCode.A))
+        {
+            Dir = MoveDir.Left;
+        }
+        else if (Input.GetKey(KeyCode.D))
+        {
+            Dir = MoveDir.Right;
+        }
+        else
+        {
+            Dir = MoveDir.None;
+        }
+    }
+
+    protected override void UpdateIdle()
+    {
+        Debug.Log(Dir);
+        if (Dir != MoveDir.None)
+        {
+            State = CreatureState.Moving;
+            return;
+        }
+        
         if (Input.GetKey(KeyCode.Space))
         {
             State = CreatureState.Skill;
@@ -120,7 +150,7 @@ public class PlayerController : CreatureController
             skillRoutine = StartCoroutine(CoStartShootArrow());
         }
     }
-
+    
     private IEnumerator CoStartPunch()
     {
         var go = Managers.Object.Find(GetFrontCellPos());
@@ -146,29 +176,5 @@ public class PlayerController : CreatureController
         yield return new WaitForSeconds(0.3f);
         State = CreatureState.Idle;
         skillRoutine = null;
-    }
-
-    private void GetDirInput()
-    {
-        if (Input.GetKey(KeyCode.W))
-        {
-            Dir = MoveDir.Up;
-        }
-        else if (Input.GetKey(KeyCode.S))
-        {
-            Dir = MoveDir.Down;
-        }
-        else if (Input.GetKey(KeyCode.A))
-        {
-            Dir = MoveDir.Left;
-        }
-        else if (Input.GetKey(KeyCode.D))
-        {
-            Dir = MoveDir.Right;
-        }
-        else
-        {
-            Dir = MoveDir.None;
-        }
     }
 }

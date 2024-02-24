@@ -1,5 +1,4 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 using static Define;
 
 public class ArrowController : CreatureController
@@ -23,6 +22,9 @@ public class ArrowController : CreatureController
                 break;
         }
 
+        State = CreatureState.Moving;
+        moveSpeed = 15f;
+
         base.Init();
     }
 
@@ -30,7 +32,7 @@ public class ArrowController : CreatureController
     {
     }
 
-    protected override void UpdateIdle()
+    protected override void MoveToNextPos()
     {
         if (_dir != MoveDir.None)
         {
