@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Google.Protobuf;
 using Google.Protobuf.Protocol;
 
 namespace Server.Game
@@ -84,6 +85,17 @@ namespace Server.Game
                             player.Session.Send(despawnPacket);
                         }
                     }
+                }
+            }
+        }
+
+        public void Broadcast(IMessage packet)
+        {
+            lock (_lock)
+            {
+                foreach (var player in _players)
+                {
+                    player.Session.Send(packet);
                 }
             }
         }
