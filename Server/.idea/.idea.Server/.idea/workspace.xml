@@ -10,11 +10,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="68446bd3-46d0-4979-8da5-ce7637443a77" name="Changes" comment="add rider .idea">
-      <change afterPath="$PROJECT_DIR$/../Client/App.config" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Client/Assets/Scripts/Managers/Managers.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Client/Assets/Scripts/Managers/Managers.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Client/Assets/Scripts/Packet/ClientPacketManager.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/../Client/Assets/Scripts/Packet/ClientPacketManager.cs.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Client/Assets/Scripts/Packet/Protocol.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Client/Assets/Scripts/Packet/Protocol.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Client/Assets/Scripts/Packet/Protocol.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/../Client/Assets/Scripts/Packet/Protocol.cs.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Client/Assets/Libs/Server.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Client/Assets/Libs/Server.dll.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Client/Assets/Libs/ServerCore.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Client/Assets/Libs/ServerCore.dll.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Client/Assets/Scripts/Packet/ServerSession.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Client/Assets/Scripts/Packet/ServerSession.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.Server/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Server/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PacketGenerator/PDL.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Server/Session/ClientSession.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Server/Session/ClientSession.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -127,7 +130,7 @@
       <updated>1708844292463</updated>
       <workItem from="1708844293581" duration="379000" />
       <workItem from="1708844684058" duration="339000" />
-      <workItem from="1708845321062" duration="1053000" />
+      <workItem from="1708845321062" duration="1874000" />
     </task>
     <task id="LOCAL-00001" summary="Migration Server Protobuf">
       <option name="closed" value="true" />
