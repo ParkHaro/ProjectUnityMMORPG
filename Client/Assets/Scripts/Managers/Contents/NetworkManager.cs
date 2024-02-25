@@ -34,7 +34,6 @@ public class NetworkManager
 		List<PacketMessage> list = PacketQueue.Instance.PopAll();
 		foreach (PacketMessage packet in list)
 		{
-			Debug.Log($"PacketCount : {list.Count} / {packet.Id}");
 			Action<PacketSession, IMessage> handler = PacketManager.Instance.GetPacketHandler(packet.Id);
 			if (handler != null)
 				handler.Invoke(_session, packet.Message);

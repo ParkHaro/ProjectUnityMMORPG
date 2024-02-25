@@ -30,15 +30,17 @@ public class ObjectManager
             playerController.PosInfo = info.PosInfo;
         }
     }
-    
-    public void Add(int id, GameObject go)
-    {
-        _objects.Add(id, go);
-    }
 
     public void Remove(int id)
     {
+        var go = FindById(id);
+        if (go == null)
+        {
+            return;
+        }
+        
         _objects.Remove(id);
+        Managers.Resource.Destroy(go);
     }
 
     public void RemoveMyPlayer()
@@ -93,6 +95,10 @@ public class ObjectManager
 
     public void Clear()
     {
+        foreach (var obj in _objects.Values)
+        {
+            Managers.Resource.Destroy(obj);
+        }
         _objects.Clear();
     }
 }
