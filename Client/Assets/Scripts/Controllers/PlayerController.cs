@@ -127,14 +127,11 @@ public class PlayerController : CreatureController
 
     protected IEnumerator CoStartShootArrow()
     {
-        var go = Managers.Resource.Instantiate("Creature/Arrow");
-        var arrowController = go.GetComponent<ArrowController>();
-        arrowController.Dir = Dir;
-        arrowController.CellPos = CellPos;
-
         _isRangedSkill = true;
+        State = CreatureState.Skill;
         yield return new WaitForSeconds(0.3f);
         State = CreatureState.Idle;
         _skillRoutine = null;
+        CheckUpdatedFlag();
     }
 }

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Google.Protobuf;
 using Google.Protobuf.Protocol;
+using Server.Data;
 
 namespace Server.Game
 {
@@ -194,6 +195,7 @@ namespace Server.Game
                 return;
             }
 
+            Console.WriteLine("HandleSkill");
             lock (_lock)
             {
                 var info = player.Info;
@@ -215,31 +217,45 @@ namespace Server.Game
                 };
                 Broadcast(resSkillPacket);
 
-                if (skillPacket.Info.SkillId == 1)
+                Skill skillData = null;
+                if (DataManager.SkillDict.TryGetValue(skillPacket.Info.SkillId, out skillData) == false)
                 {
-                    // TODO : 데미지 판정
-                    var skillPos = player.GetFrontCellPos(info.PosInfo.MoveDir);
-                    var target = Map.Find(skillPos);
-                    if (target != null)
-                    {
-                        Console.WriteLine("Hit GameObject !");
-                    }
+                    return;
                 }
-                else if (skillPacket.Info.SkillId == 2)
-                {
-                    // TODO : Arrow
-                    var arrow = ObjectManager.Instance.Add<Arrow>();
-                    if (arrow == null)
-                    {
-                        return;
-                    }
 
-                    arrow.Owner = player;
-                    arrow.PosInfo.State = CreatureState.Moving;
-                    arrow.PosInfo.MoveDir = info.PosInfo.MoveDir;
-                    arrow.PosInfo.PosX = info.PosInfo.PosX;
-                    arrow.PosInfo.PosY = info.PosInfo.PosY;
-                    EnterGame(arrow);
+                Console.WriteLine("Use Skill : " + skillData.skillType);
+                switch (skillData.skillType)
+                {
+                    case SkillType.SkillAuto:
+                    {
+                        // TODO : 데미지 판정
+                        var skillPos = player.GetFrontCellPos(info.PosInfo.MoveDir);
+                        var target = Map.Find(skillPos);
+                        if (target != null)
+                        {
+                            Console.WriteLine("Hit GameObject !");
+                        }
+                    }
+                        break;
+                    case SkillType.SkillProjectile:
+                    {
+                        // TODO : Arrow
+                        var arrow = ObjectManager.Instance.Add<Arrow>();
+                        if (arrow == null)
+                        {
+                            return;
+                        }
+
+                        arrow.Owner = player;
+                        arrow.Data = skillData;
+                        
+                        arrow.PosInfo.State = CreatureState.Moving;
+                        arrow.PosInfo.MoveDir = info.PosInfo.MoveDir;
+                        arrow.PosInfo.PosX = info.PosInfo.PosX;
+                        arrow.PosInfo.PosY = info.PosInfo.PosY;
+                        EnterGame(arrow);
+                    }
+                        break;
                 }
             }
         }

@@ -1,8 +1,8 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Google.Protobuf.Protocol;
 
-namespace Data
+namespace Server.Data
 {
     #region Stat
 
@@ -30,7 +30,7 @@ namespace Data
     }
 
     #endregion
-    
+
     #region Skill
 
     [Serializable]

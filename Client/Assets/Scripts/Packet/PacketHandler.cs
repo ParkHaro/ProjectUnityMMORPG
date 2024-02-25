@@ -14,16 +14,13 @@ class PacketHandler
 
     public static void S_LeaveGameHandler(PacketSession session, IMessage packet)
     {
-        Debug.Log("Leave");
         S_LeaveGame leaveGamePacket = packet as S_LeaveGame;
         Managers.Object.RemoveMyPlayer();
     }
 
     public static void S_SpawnHandler(PacketSession session, IMessage packet)
     {
-        Debug.Log("Spawn");
         S_Spawn spawnPacket = packet as S_Spawn;
-        Debug.Log($"SpawnPacket Players Count : {spawnPacket.Objects.Count}");
         foreach (var obj in spawnPacket.Objects)
         {
             Managers.Object.Add(obj, isMyPlayer: false);
