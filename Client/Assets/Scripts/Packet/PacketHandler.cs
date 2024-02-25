@@ -5,44 +5,61 @@ using UnityEngine;
 
 class PacketHandler
 {
-	public static void S_EnterGameHandler(PacketSession session, IMessage packet)
-	{
-		S_EnterGame enterGamePacket = packet as S_EnterGame;
-		ServerSession serverSession = session as ServerSession;
-		
-		Debug.Log($"{nameof(S_EnterGameHandler)} / {enterGamePacket.Player}");
-	}
+    public static void S_EnterGameHandler(PacketSession session, IMessage packet)
+    {
+        Debug.Log("Enter");
+        S_EnterGame enterGamePacket = packet as S_EnterGame;
+        Managers.Object.Add(enterGamePacket.Player, isMyPlayer: true);
+    }
 
-	public static void S_LeaveGameHandler(PacketSession session, IMessage packet)
-	{
-		S_LeaveGame leaveGamePacket = packet as S_LeaveGame;
-		ServerSession serverSession = session as ServerSession;
-		
-		Debug.Log($"{nameof(S_LeaveGameHandler)}");
-	}
+    public static void S_LeaveGameHandler(PacketSession session, IMessage packet)
+    {
+        Debug.Log("Leave");
+        S_LeaveGame leaveGamePacket = packet as S_LeaveGame;
+        Managers.Object.RemoveMyPlayer();
+    }
 
-	public static void S_SpawnHandler(PacketSession session, IMessage packet)
-	{
-		S_Spawn spawnPacket = packet as S_Spawn;
-		ServerSession serverSession = session as ServerSession;
-		
-		Debug.Log($"{nameof(S_SpawnHandler)} / {spawnPacket.Players}");
+    public static void S_SpawnHandler(PacketSession session, IMessage packet)
+    {
+        Debug.Log("Spawn");
+        S_Spawn spawnPacket = packet as S_Spawn;
+        Debug.Log($"SpawnPacket Players Count : {spawnPacket.Players.Count}");
+        foreach (var player in spawnPacket.Players)
+        {
+            Managers.Object.Add(player, isMyPlayer: false);
+        }
 
-	}
+        Debug.Log($"{nameof(S_SpawnHandler)} / {spawnPacket.Players}");
+    }
 
-	public static void S_DespawnHandler(PacketSession session, IMessage packet)
-	{
-		S_Despawn despawnPacket = packet as S_Despawn;
-		ServerSession serverSession = session as ServerSession;
-		
-		Debug.Log($"{nameof(S_DespawnHandler)}");
-	}
+    public static void S_DespawnHandler(PacketSession session, IMessage packet)
+    {
+        S_Despawn despawnPacket = packet as S_Despawn;
+        foreach (var playerId in despawnPacket.PlayerIds)
+        {
+            Managers.Object.Remove(playerId);
+        }
 
-	public static void S_MoveHandler(PacketSession session, IMessage packet)
-	{
-		S_Move movePacket = packet as S_Move;
-		ServerSession serverSession = session as ServerSession;
-		
-		Debug.Log($"{nameof(S_MoveHandler)}");
-	}
+        Debug.Log($"{nameof(S_DespawnHandler)}");
+    }
+
+    public static void S_MoveHandler(PacketSession session, IMessage packet)
+    {
+        S_Move movePacket = packet as S_Move;
+        ServerSession serverSession = session as ServerSession;
+
+        var go = Managers.Object.FindById(movePacket.PlayerId);
+        if (go == null)
+        {
+            return;
+        }
+        
+        var creatureController = go.GetComponent<CreatureController>();
+        if (creatureController == null)
+        {
+            return;
+        }
+        
+        creatureController.PosInfo = movePacket.PosInfo;
+    }
 }

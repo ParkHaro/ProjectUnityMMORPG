@@ -1,18 +1,17 @@
 ﻿using ServerCore;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Net;
-using UnityEngine;
 using Google.Protobuf;
+using UnityEngine;
 
 public class NetworkManager
 {
 	ServerSession _session = new ServerSession();
 
-	public void Send(ArraySegment<byte> sendBuff)
+	public void Send(IMessage packet)
 	{
-		_session.Send(sendBuff);
+		_session.Send(packet);
 	}
 
 	public void Init()
@@ -35,6 +34,7 @@ public class NetworkManager
 		List<PacketMessage> list = PacketQueue.Instance.PopAll();
 		foreach (PacketMessage packet in list)
 		{
+			Debug.Log($"PacketCount : {list.Count} / {packet.Id}");
 			Action<PacketSession, IMessage> handler = PacketManager.Instance.GetPacketHandler(packet.Id);
 			if (handler != null)
 				handler.Invoke(_session, packet.Message);

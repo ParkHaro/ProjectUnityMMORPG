@@ -1,6 +1,6 @@
 ﻿using System.Collections;
+using Google.Protobuf.Protocol;
 using UnityEngine;
-using static Define;
 
 public class MonsterController : CreatureController
 {
@@ -18,10 +18,10 @@ public class MonsterController : CreatureController
 
     public override CreatureState State
     {
-        get => state;
+        get => PosInfo.State;
         set
         {
-            if (state == value)
+            if (PosInfo.State == value)
             {
                 return;
             }
@@ -118,7 +118,7 @@ public class MonsterController : CreatureController
         effect.GetComponent<Animator>().Play("Start");
         Destroy(effect, 0.5f);
 
-        Managers.Object.Remove(gameObject);
+        Managers.Object.Remove(Id);
         Managers.Resource.Destroy(gameObject);
     }
 

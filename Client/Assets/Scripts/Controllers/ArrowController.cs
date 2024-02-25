@@ -1,5 +1,5 @@
-﻿using UnityEngine;
-using static Define;
+﻿using Google.Protobuf.Protocol;
+using UnityEngine;
 
 public class ArrowController : CreatureController
 {
@@ -34,11 +34,11 @@ public class ArrowController : CreatureController
 
     protected override void MoveToNextPos()
     {
-        if (dir != MoveDir.None)
+        if (Dir != MoveDir.None)
         {
             Vector3Int destPos = CellPos;
 
-            switch (dir)
+            switch (Dir)
             {
                 case MoveDir.Up:
                     destPos += Vector3Int.up;
