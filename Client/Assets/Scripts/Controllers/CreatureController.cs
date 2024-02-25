@@ -5,8 +5,30 @@ public class CreatureController : MonoBehaviour
 {
     public int Id { get; set; }
 
-    [SerializeField] protected float moveSpeed = 5f;
-    
+    private StatInfo _stat = new StatInfo();
+
+    public StatInfo Stat
+    {
+        get => _stat;
+        set
+        {
+            if (_stat.Equals(value))
+            {
+                return;
+            }
+
+            _stat.Hp = value.Hp;
+            _stat.MaxHp = value.MaxHp;
+            _stat.Speed = value.Speed;
+        }
+    }
+
+    public float Speed
+    {
+        get => Stat.Speed;
+        set => Stat.Speed = value;
+    }
+
     protected bool _isUpdated = false;
 
     private PositionInfo _positionInfo = new();
@@ -35,17 +57,17 @@ public class CreatureController : MonoBehaviour
         var destPos = Managers.Map.CurrentGrid.CellToWorld(CellPos) + new Vector3(0.5f, 0.5f);
         transform.position = destPos;
     }
-    
+
     public Vector3Int CellPos
     {
         get => new(PosInfo.PosX, PosInfo.PosY, 0);
         set
         {
-            if(PosInfo.PosX == value.x && PosInfo.PosY == value.y)
+            if (PosInfo.PosX == value.x && PosInfo.PosY == value.y)
             {
                 return;
             }
-            
+
             PosInfo.PosX = value.x;
             PosInfo.PosY = value.y;
             _isUpdated = true;
@@ -265,21 +287,20 @@ public class CreatureController : MonoBehaviour
         var dist = moveDir.magnitude;
         moveDir.Normalize();
 
-        if (dist < moveSpeed * Time.deltaTime)
+        if (dist < Speed * Time.deltaTime)
         {
             transform.position = destPos;
             MoveToNextPos();
         }
         else
         {
-            transform.position += moveDir * (moveSpeed * Time.deltaTime);
+            transform.position += moveDir * (Speed * Time.deltaTime);
             State = CreatureState.Moving;
         }
     }
 
     protected virtual void MoveToNextPos()
     {
-
     }
 
     public virtual void UpdateSkill()

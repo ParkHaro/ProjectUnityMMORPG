@@ -41,7 +41,7 @@ namespace Server.Game
                 var target = Room.Map.Find(destPos);
                 if (target != null)
                 {
-                    // TODO 피격
+                    target.OnDamaged(this, Data.damage);
                 }
                 
                 Room.LeaveGame(Id);

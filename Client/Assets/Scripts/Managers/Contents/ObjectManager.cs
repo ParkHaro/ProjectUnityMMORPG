@@ -28,6 +28,7 @@ public class ObjectManager
                 MyPlayer = go.GetComponent<MyPlayerController>();
                 MyPlayer.Id = info.ObjectId;
                 MyPlayer.PosInfo = info.PosInfo;
+                MyPlayer.Stat = info.StatInfo;
                 MyPlayer.SyncPos();
             }
             else
@@ -39,6 +40,7 @@ public class ObjectManager
                 var playerController = go.GetComponent<PlayerController>();
                 playerController.Id = info.ObjectId;
                 playerController.PosInfo = info.PosInfo;
+                playerController.Stat = info.StatInfo;
                 playerController.SyncPos();
             }
         }
@@ -53,8 +55,7 @@ public class ObjectManager
             _objects.Add(info.ObjectId, go);
             
             var arrowController = go.GetComponent<ArrowController>();
-            arrowController.Dir = info.PosInfo.MoveDir;
-            arrowController.CellPos = new Vector3Int(info.PosInfo.PosX, info.PosInfo.PosY, 0);
+            arrowController.Stat = info.StatInfo;
             arrowController.SyncPos();
         }
     }

@@ -1,3 +1,4 @@
+using System;
 using Google.Protobuf.Protocol;
 
 namespace Server.Game
@@ -9,6 +10,12 @@ namespace Server.Game
         public Player()
         {
             ObjectType = GameObjectType.Player;
+            Speed = 20f;
+        }
+        
+        public override void OnDamaged(GameObject attacker, int damage)
+        {
+            Console.WriteLine($"TODO : damage {damage}");
         }
     }
 }
