@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Reflection;
 using Google.Protobuf;
 using Google.Protobuf.Protocol;
 
@@ -9,7 +11,14 @@ namespace Server.Game
         private object _lock = new object();
         public int RoomId { get; set; }
 
-        private readonly List<Player> _players = new List<Player>();
+        private readonly Dictionary<int, Player> _players = new Dictionary<int, Player>();
+
+        private Map _map = new Map();
+
+        public void Init(int mapId)
+        {
+            _map.LoadMap(mapId, "../../../../../Common/MapData");
+        }
 
         public void EnterGame(Player newPlayer)
         {
@@ -20,7 +29,7 @@ namespace Server.Game
 
             lock (_lock)
             {
-                _players.Add(newPlayer);
+                _players.Add(newPlayer.Info.PlayerId, newPlayer);
                 newPlayer.Room = this;
 
                 // 본인에게 정보 전송
@@ -30,7 +39,7 @@ namespace Server.Game
                     newPlayer.Session.Send(enterPacket);
 
                     S_Spawn spawnPacket = new S_Spawn();
-                    foreach (var player in _players)
+                    foreach (var player in _players.Values)
                     {
                         if (newPlayer != player)
                         {
@@ -45,7 +54,7 @@ namespace Server.Game
                 {
                     var spawnPacket = new S_Spawn();
                     spawnPacket.Players.Add(newPlayer.Info);
-                    foreach (var player in _players)
+                    foreach (var player in _players.Values)
                     {
                         if (newPlayer != player)
                         {
@@ -60,13 +69,12 @@ namespace Server.Game
         {
             lock (_lock)
             {
-                var leavePlayer = _players.Find(p => p.Info.PlayerId == playerId);
-                if (leavePlayer == null)
+                Player leavePlayer;
+                if (_players.Remove(playerId, out leavePlayer) == false)
                 {
                     return;
                 }
 
-                _players.Remove(leavePlayer);
                 leavePlayer.Room = null;
 
                 // 본인에게 정보 전송
@@ -79,7 +87,7 @@ namespace Server.Game
                 {
                     S_Despawn despawnPacket = new S_Despawn();
                     despawnPacket.PlayerIds.Add(leavePlayer.Info.PlayerId);
-                    foreach (var player in _players)
+                    foreach (var player in _players.Values)
                     {
                         if (leavePlayer != player)
                         {
@@ -100,9 +108,19 @@ namespace Server.Game
             lock (_lock)
             {
                 // TODO : 검증
-
+                var movePosInfo = movePacket.PosInfo;
                 var info = player.Info;
-                info.PosInfo = movePacket.PosInfo;
+                if (movePosInfo.PosX != info.PosInfo.PosX || movePosInfo.PosY != info.PosInfo.PosY)
+                {
+                    if (_map.CanGo(new Vector2Int(movePosInfo.PosX, movePosInfo.PosY)) == false)
+                    {
+                        return;
+                    }
+                }
+
+                info.PosInfo.State = movePosInfo.State;
+                info.PosInfo.MoveDir = movePosInfo.MoveDir;
+                _map.ApplyMove(player, new Vector2Int(movePosInfo.PosX, movePosInfo.PosY));
 
                 var resMovePacket = new S_Move();
                 resMovePacket.PlayerId = player.Info.PlayerId;
@@ -126,9 +144,9 @@ namespace Server.Game
                 {
                     return;
                 }
-                
+
                 // TODO : 스킬 사용 가능 여부 검증
-                
+
                 info.PosInfo.State = CreatureState.Skill;
                 var resSkillPacket = new S_Skill
                 {
@@ -140,9 +158,14 @@ namespace Server.Game
                 };
 
                 Broadcast(resSkillPacket);
-                
+
                 // TODO : 데미지 판정
-                
+                var skillPos = player.GetFrontCellPos(info.PosInfo.MoveDir);
+                var target = _map.Find(skillPos);
+                if (target != null)
+                {
+                    Console.WriteLine("Hit Player !");
+                }
             }
         }
 
@@ -150,7 +173,7 @@ namespace Server.Game
         {
             lock (_lock)
             {
-                foreach (var player in _players)
+                foreach (var player in _players.Values)
                 {
                     player.Session.Send(packet);
                 }

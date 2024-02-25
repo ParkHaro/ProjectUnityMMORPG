@@ -30,6 +30,12 @@ public class CreatureController : MonoBehaviour
     protected Animator _animator;
     protected SpriteRenderer _spriteRenderer;
 
+    public void SyncPos()
+    {
+        var destPos = Managers.Map.CurrentGrid.CellToWorld(CellPos) + new Vector3(0.5f, 0.5f);
+        transform.position = destPos;
+    }
+    
     public Vector3Int CellPos
     {
         get => new(PosInfo.PosX, PosInfo.PosY, 0);
@@ -62,7 +68,6 @@ public class CreatureController : MonoBehaviour
         }
     }
 
-    protected MoveDir _lastDir = MoveDir.Down;
     public MoveDir Dir
     {
         get => PosInfo.MoveDir;
@@ -74,10 +79,6 @@ public class CreatureController : MonoBehaviour
             }
 
             PosInfo.MoveDir = value;
-            if (PosInfo.MoveDir != MoveDir.None)
-            {
-                _lastDir = PosInfo.MoveDir;
-            }
 
             UpdateAnimation();
             _isUpdated = true;
@@ -106,14 +107,14 @@ public class CreatureController : MonoBehaviour
             return MoveDir.Down;
         }
 
-        return Dir = MoveDir.None;
+        return MoveDir.Down;
     }
 
     public Vector3Int GetFrontCellPos()
     {
         var cellPos = CellPos;
 
-        switch (_lastDir)
+        switch (Dir)
         {
             case MoveDir.Up:
                 cellPos += Vector3Int.up;
@@ -138,7 +139,7 @@ public class CreatureController : MonoBehaviour
         {
             case CreatureState.Idle:
             {
-                switch (_lastDir)
+                switch (Dir)
                 {
                     case MoveDir.Up:
                         _animator.Play("IdleBack");
@@ -183,7 +184,7 @@ public class CreatureController : MonoBehaviour
             }
                 break;
             case CreatureState.Skill:
-                switch (_lastDir)
+                switch (Dir)
                 {
                     case MoveDir.Up:
                         _animator.Play("AttackBack");
@@ -223,8 +224,7 @@ public class CreatureController : MonoBehaviour
         transform.position = initPos;
 
         State = CreatureState.Idle;
-        Dir = MoveDir.None;
-        CellPos = new Vector3Int(0, 0, 0);
+        Dir = MoveDir.Down;
         UpdateAnimation();
     }
 

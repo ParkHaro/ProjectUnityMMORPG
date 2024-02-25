@@ -5,8 +5,7 @@ public class ArrowController : CreatureController
 {
     protected override void Init()
     {
-        // TODO
-        switch (_lastDir)
+        switch (Dir)
         {
             case MoveDir.Up:
                 transform.rotation = Quaternion.Euler(0, 0, 0);
@@ -34,48 +33,46 @@ public class ArrowController : CreatureController
 
     protected override void MoveToNextPos()
     {
-        if (Dir != MoveDir.None)
+        Vector3Int destPos = CellPos;
+
+        switch (Dir)
         {
-            Vector3Int destPos = CellPos;
+            case MoveDir.Up:
+                destPos += Vector3Int.up;
+                break;
+            case MoveDir.Down:
+                destPos += Vector3Int.down;
+                break;
+            case MoveDir.Left:
+                destPos += Vector3Int.left;
+                break;
+            case MoveDir.Right:
+                destPos += Vector3Int.right;
+                break;
+        }
 
-            switch (Dir)
+        State = CreatureState.Moving;
+        if (Managers.Map.CanGo(destPos))
+        {
+            var go = Managers.Object.Find(destPos);
+            if (go == null)
             {
-                case MoveDir.Up:
-                    destPos += Vector3Int.up;
-                    break;
-                case MoveDir.Down:
-                    destPos += Vector3Int.down;
-                    break;
-                case MoveDir.Left:
-                    destPos += Vector3Int.left;
-                    break;
-                case MoveDir.Right:
-                    destPos += Vector3Int.right;
-                    break;
-            }
-
-            State = CreatureState.Moving;
-            if (Managers.Map.CanGo(destPos))
-            {
-                var go = Managers.Object.Find(destPos);
-                if (go == null)
-                {
-                    CellPos = destPos;
-                }
-                else
-                {
-                    var target = go.GetComponent<CreatureController>();
-                    if (target != null)
-                    {
-                        target.OnDamaged();
-                    }
-                    Managers.Resource.Destroy(gameObject);
-                }
+                CellPos = destPos;
             }
             else
             {
+                var target = go.GetComponent<CreatureController>();
+                if (target != null)
+                {
+                    target.OnDamaged();
+                }
+
                 Managers.Resource.Destroy(gameObject);
             }
+        }
+        else
+        {
+            Managers.Resource.Destroy(gameObject);
         }
     }
 }

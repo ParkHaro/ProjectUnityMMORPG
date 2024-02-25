@@ -1,8 +1,11 @@
+using System.Collections;
 using Google.Protobuf.Protocol;
 using UnityEngine;
 
 public class MyPlayerController : PlayerController
 {
+    private bool _isMoveKeyPressed;
+
     protected override void Init()
     {
         base.Init();
@@ -26,18 +29,34 @@ public class MyPlayerController : PlayerController
     protected override void UpdateIdle()
     {
         base.UpdateIdle();
-        if (Dir != MoveDir.None)
+        if (_isMoveKeyPressed)
         {
             State = CreatureState.Moving;
             return;
         }
         
-        if (Input.GetKey(KeyCode.Space))
+        if (_inputCooltimeRoutine == null && Input.GetKey(KeyCode.Space))
         {
-            State = CreatureState.Skill;
-            // _skillRoutine = StartCoroutine(CoStartPunch());
-            _skillRoutine = StartCoroutine(CoStartShootArrow());
+            Debug.Log("Skill !!");
+            
+            var skillPacket = new C_Skill
+            {
+                Info = new SkillInfo
+                {
+                    SkillId = 1
+                }
+            };
+            Managers.Network.Send(skillPacket);
+            
+            _inputCooltimeRoutine = StartCoroutine(CoInputCooltime(0.2f));
         }
+    }
+
+    private Coroutine _inputCooltimeRoutine;
+    private IEnumerator CoInputCooltime(float time)
+    {
+        yield return new WaitForSeconds(time);
+        _inputCooltimeRoutine = null;
     }
 
     private void LateUpdate()
@@ -48,6 +67,8 @@ public class MyPlayerController : PlayerController
     
     private void GetDirInput()
     {
+        _isMoveKeyPressed = true;
+        
         if (Input.GetKey(KeyCode.W))
         {
             Dir = MoveDir.Up;
@@ -66,13 +87,13 @@ public class MyPlayerController : PlayerController
         }
         else
         {
-            Dir = MoveDir.None;
+            _isMoveKeyPressed = false;
         }
     }
     
     protected override void MoveToNextPos()
     {
-        if (Dir == MoveDir.None)
+        if (_isMoveKeyPressed == false)
         {
             State = CreatureState.Idle;
             CheckUpdatedFlag();
@@ -108,7 +129,7 @@ public class MyPlayerController : PlayerController
         CheckUpdatedFlag();
     }
 
-    private void CheckUpdatedFlag()
+    protected override void CheckUpdatedFlag()
     {
         if (_isUpdated)
         {

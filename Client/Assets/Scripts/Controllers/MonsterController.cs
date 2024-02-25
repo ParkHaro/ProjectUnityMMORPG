@@ -39,7 +39,7 @@ public class MonsterController : CreatureController
     {
         base.Init();
         State = CreatureState.Idle;
-        Dir = MoveDir.None;
+        Dir = MoveDir.Down;
 
         moveSpeed = 3f;
         isRangedSkill = Random.Range(0, 2) == 0;
@@ -195,7 +195,7 @@ public class MonsterController : CreatureController
     {
         var go = Managers.Resource.Instantiate("Creature/Arrow");
         var arrowController = go.GetComponent<ArrowController>();
-        arrowController.Dir = _lastDir;
+        arrowController.Dir = Dir;
         arrowController.CellPos = CellPos;
 
         yield return new WaitForSeconds(0.3f);

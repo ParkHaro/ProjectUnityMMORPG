@@ -14,11 +14,16 @@ public class PlayerController : CreatureController
 
     protected override void UpdateAnimation()
     {
+        if (_animator == null || _spriteRenderer == null)
+        {
+            return;
+        }
+        
         switch (State)
         {
             case CreatureState.Idle:
             {
-                switch (_lastDir)
+                switch (Dir)
                 {
                     case MoveDir.Up:
                         _animator.Play("IdleBack");
@@ -63,7 +68,7 @@ public class PlayerController : CreatureController
             }
                 break;
             case CreatureState.Skill:
-                switch (_lastDir)
+                switch (Dir)
                 {
                     case MoveDir.Up:
                         _animator.Play(_isRangedSkill ? "AttackWeaponBack" : "AttackBack");
@@ -93,39 +98,38 @@ public class PlayerController : CreatureController
     {
         base.UpdateController();
     }
-    
-    protected override void UpdateIdle()
+
+    public void UseSkill(int skillId)
     {
-        if (Dir != MoveDir.None)
+        if (skillId == 1)
         {
-            State = CreatureState.Moving;
-            return;
+            _skillRoutine = StartCoroutine(CoStartPunch());
+        }
+        else if (skillId == 2)
+        {
+            _skillRoutine = StartCoroutine(CoStartShootArrow());
         }
     }
-    
+
+    protected virtual void CheckUpdatedFlag()
+    {
+    }
+
     protected IEnumerator CoStartPunch()
     {
-        var go = Managers.Object.Find(GetFrontCellPos());
-        if (go != null)
-        {
-            var creatureController = go.GetComponent<CreatureController>();
-            if (creatureController != null)
-            {
-                creatureController.OnDamaged();
-            }
-        }
-
         _isRangedSkill = false;
+        State = CreatureState.Skill;
         yield return new WaitForSeconds(0.5f);
         State = CreatureState.Idle;
         _skillRoutine = null;
+        CheckUpdatedFlag();
     }
 
     protected IEnumerator CoStartShootArrow()
     {
         var go = Managers.Resource.Instantiate("Creature/Arrow");
         var arrowController = go.GetComponent<ArrowController>();
-        arrowController.Dir = _lastDir;
+        arrowController.Dir = Dir;
         arrowController.CellPos = CellPos;
 
         _isRangedSkill = true;
