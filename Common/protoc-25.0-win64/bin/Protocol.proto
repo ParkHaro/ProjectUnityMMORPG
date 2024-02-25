@@ -13,6 +13,7 @@ enum MsgId {
   S_MOVE = 5;
   C_SKILL = 6;
   S_SKILL = 7;
+  S_CHANGE_HP = 8;
 }
 
 enum CreatureState {
@@ -61,6 +62,11 @@ message C_Move {
   PositionInfo posInfo = 1;
 }
 
+message S_Move {
+  int32 objectId = 1;
+  PositionInfo posInfo = 2;
+}
+
 message C_Skill {
   SkillInfo info = 1;
 }
@@ -70,9 +76,9 @@ message S_Skill {
   SkillInfo info = 2;
 }
 
-message S_Move {
+message S_ChangeHp {
   int32 objectId = 1;
-  PositionInfo posInfo = 2;
+  int32 hp = 2;
 }
 
 message ObjectInfo {
@@ -90,9 +96,12 @@ message PositionInfo {
 }
 
 message StatInfo {
-  int32 hp = 1;
-  int32 maxHp = 2;
-  float speed = 3;
+  int32 level = 1;
+  int32 hp = 2;
+  int32 maxHp = 3;
+  int32 attack = 4;
+  float speed = 5;
+  int32 totalExp = 6;
 }
 
 message SkillInfo {

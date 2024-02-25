@@ -9,18 +9,17 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="68446bd3-46d0-4979-8da5-ce7637443a77" name="Changes" comment="add skill json">
-      <change beforePath="$PROJECT_DIR$/../Client/Assets/Scripts/Controllers/ArrowController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Client/Assets/Scripts/Controllers/ArrowController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Client/Assets/Scripts/Controllers/CreatureController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Client/Assets/Scripts/Controllers/CreatureController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Client/Assets/Scripts/Controllers/MonsterController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Client/Assets/Scripts/Controllers/MonsterController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Client/Assets/Scripts/Managers/Contents/ObjectManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Client/Assets/Scripts/Managers/Contents/ObjectManager.cs" afterDir="false" />
+    <list default="true" id="68446bd3-46d0-4979-8da5-ce7637443a77" name="Changes" comment="Implement Stat">
+      <change beforePath="$PROJECT_DIR$/../Client/Assets/Resources/Data/StatData.json" beforeDir="false" afterPath="$PROJECT_DIR$/../Client/Assets/Resources/Data/StatData.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Client/Assets/Scripts/Packet/ClientPacketManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Client/Assets/Scripts/Packet/ClientPacketManager.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Client/Assets/Scripts/Packet/Protocol.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Client/Assets/Scripts/Packet/Protocol.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Common/protoc-25.0-win64/bin/ClientPacketManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Common/protoc-25.0-win64/bin/ClientPacketManager.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Common/protoc-25.0-win64/bin/Protocol.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Common/protoc-25.0-win64/bin/Protocol.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Common/protoc-25.0-win64/bin/Protocol.proto" beforeDir="false" afterPath="$PROJECT_DIR$/../Common/protoc-25.0-win64/bin/Protocol.proto" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Server/Game/Object/Arrow.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Server/Game/Object/Arrow.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Server/Data/Data.Contents.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Server/Data/Data.Contents.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Server/Data/DataManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Server/Data/DataManager.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Server/Game/Object/GameObject.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Server/Game/Object/GameObject.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Server/Game/Object/Player.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Server/Game/Object/Player.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Server/Game/Room/GameRoom.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Server/Game/Room/GameRoom.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Server/Packet/Protocol.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Server/Packet/Protocol.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -58,6 +57,7 @@
     <setting file="mock://C:/Users/haro7/Projects/Portfolio/ProjectUnityMMORPG/Server/PacketGenerator/PacketFormat.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock://C:/Users/haro7/Projects/Portfolio/ProjectUnityMMORPG/Server/Server/Game/GameRoom.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock://C:/Users/haro7/Projects/Portfolio/ProjectUnityMMORPG/Server/Server/Game/Object/Arrow.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://C:/Users/haro7/Projects/Portfolio/ProjectUnityMMORPG/Server/Server/Game/Object/Arrow.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock://C:/Users/haro7/Projects/Portfolio/ProjectUnityMMORPG/Server/Server/Program.cs" root0="SKIP_HIGHLIGHTING" />
   </component>
   <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="true" />
@@ -75,7 +75,7 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     ".NET Project.PacketGenerator.executor": "Run",
-    ".NET Project.Server.executor": "Run",
+    ".NET Project.Server.executor": "Debug",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "git-widget-placeholder": "implement/clinet",
@@ -212,7 +212,15 @@
       <option name="project" value="LOCAL" />
       <updated>1708891811142</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="Implement Stat">
+      <option name="closed" value="true" />
+      <created>1708892627430</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1708892627430</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -238,23 +246,37 @@
     <MESSAGE value="Update Packet" />
     <MESSAGE value="Create SkillData and apply data" />
     <MESSAGE value="add skill json" />
-    <option name="LAST_COMMIT_MESSAGE" value="add skill json" />
+    <MESSAGE value="Implement Stat" />
+    <option name="LAST_COMMIT_MESSAGE" value="Implement Stat" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Server/Data/DataManager.cs</url>
-          <line>20</line>
+          <line>21</line>
           <properties documentPath="C:\Users\haro7\Projects\Portfolio\ProjectUnityMMORPG\Server\Server\Data\DataManager.cs" initialLine="20" containingFunctionPresentation="Method 'LoadData'">
             <startOffsets>
-              <option value="661" />
+              <option value="705" />
             </startOffsets>
             <endOffsets>
-              <option value="662" />
+              <option value="706" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="12" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Server/Data/Data.Contents.cs</url>
+          <line>20</line>
+          <properties documentPath="C:\Users\haro7\Projects\Portfolio\ProjectUnityMMORPG\Server\Server\Data\Data.Contents.cs" initialLine="20" containingFunctionPresentation="Method 'MakeDict'">
+            <startOffsets>
+              <option value="566" />
+            </startOffsets>
+            <endOffsets>
+              <option value="578" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="13" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

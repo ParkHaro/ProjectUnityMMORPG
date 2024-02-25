@@ -1,3 +1,4 @@
+using System;
 using Google.Protobuf.Protocol;
 
 namespace Server.Game
@@ -69,6 +70,21 @@ namespace Server.Game
         }
 
         public virtual void OnDamaged(GameObject attacker, int damage)
+        {
+            Stat.Hp -= Math.Max(Stat.Hp - damage, 0);
+
+            var changeHpPacket = new S_ChangeHp();
+            changeHpPacket.ObjectId = Id;
+            changeHpPacket.Hp = Stat.Hp;
+            Room.Broadcast(changeHpPacket);
+            
+            if (Stat.Hp <= 0)
+            {
+                OnDead(attacker);
+            }
+        }
+        
+        public virtual void OnDead(GameObject attacker)
         {
             
         }

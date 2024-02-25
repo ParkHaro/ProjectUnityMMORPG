@@ -3,6 +3,7 @@ using ServerCore;
 using System.Net;
 using Google.Protobuf.Protocol;
 using Google.Protobuf;
+using Server.Data;
 using Server.Game;
 
 namespace Server
@@ -37,6 +38,11 @@ namespace Server
                 MyPlayer.Info.PosInfo.MoveDir = MoveDir.Down;
                 MyPlayer.Info.PosInfo.PosX = 0;
                 MyPlayer.Info.PosInfo.PosY = 0;
+
+                StatInfo stat = null;
+                DataManager.StatDict.TryGetValue(1, out stat);
+                MyPlayer.Stat.MergeFrom(stat);
+                
                 MyPlayer.Session = this;
             }
             
