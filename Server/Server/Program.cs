@@ -5,6 +5,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Server.Game;
 using ServerCore;
 
 namespace Server
@@ -20,6 +21,8 @@ namespace Server
 
 		static void Main(string[] args)
 		{
+			RoomManager.Instance.Add();
+			
 			// DNS (Domain Name System)
 			string host = Dns.GetHostName();
 			IPHostEntry ipHost = Dns.GetHostEntry(host);

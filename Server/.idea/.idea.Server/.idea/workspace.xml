@@ -10,13 +10,18 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="68446bd3-46d0-4979-8da5-ce7637443a77" name="Changes" comment="add rider .idea">
-      <change beforePath="$PROJECT_DIR$/../Client/Assets/Libs/Server.dll" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Client/Assets/Libs/Server.dll.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Client/Assets/Libs/ServerCore.dll" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Client/Assets/Libs/ServerCore.dll.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Client/Assets/Scripts/Packet/ServerSession.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Client/Assets/Scripts/Packet/ServerSession.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.Server/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Server/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PacketGenerator/PDL.xml" beforeDir="false" />
+      <change afterPath="$PROJECT_DIR$/Server/Game/GameRoom.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Server/Game/Player.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Server/Game/PlayerManager.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Server/Game/RoomManager.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Client/Assets/Scripts/Packet/Protocol.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Client/Assets/Scripts/Packet/Protocol.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Common/protoc-25.0-win64/bin/ClientPacketManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Common/protoc-25.0-win64/bin/ClientPacketManager.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Common/protoc-25.0-win64/bin/Protocol.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Common/protoc-25.0-win64/bin/Protocol.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Common/protoc-25.0-win64/bin/Protocol.proto" beforeDir="false" afterPath="$PROJECT_DIR$/../Common/protoc-25.0-win64/bin/Protocol.proto" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Common/protoc-25.0-win64/bin/ServerPacketManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Common/protoc-25.0-win64/bin/ServerPacketManager.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Server/Packet/PacketHandler.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Server/Packet/PacketHandler.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Server/Packet/Protocol.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Server/Packet/Protocol.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Server/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Server/Program.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Server/Session/ClientSession.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Server/Session/ClientSession.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -130,7 +135,7 @@
       <updated>1708844292463</updated>
       <workItem from="1708844293581" duration="379000" />
       <workItem from="1708844684058" duration="339000" />
-      <workItem from="1708845321062" duration="1874000" />
+      <workItem from="1708845321062" duration="4332000" />
     </task>
     <task id="LOCAL-00001" summary="Migration Server Protobuf">
       <option name="closed" value="true" />

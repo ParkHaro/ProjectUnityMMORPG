@@ -6,11 +6,9 @@ using System;
 
 class PacketHandler
 {
-    public static void C_ChatHandler(PacketSession session, IMessage packet)
+    public static void C_MoveHandler(PacketSession session, IMessage packet)
     {
-        S_Chat chatPacket = packet as S_Chat;
+        C_Move chatPacket = packet as C_Move;
         ClientSession serverSession = session as ClientSession;
-
-        Console.WriteLine(chatPacket.Context);
     }
 }
