@@ -50,12 +50,12 @@ message C_Move {
 }
 
 message C_Skill {
-  SkillInfo skillInfo = 1;
+  SkillInfo info = 1;
 }
 
 message S_Skill {
   int32 playerId = 1;
-  SkillInfo skillInfo = 2;
+  SkillInfo info = 2;
 }
 
 message S_Move {

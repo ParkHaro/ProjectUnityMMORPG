@@ -130,10 +130,15 @@ namespace Server.Game
                 // TODO : 스킬 사용 가능 여부 검증
                 
                 info.PosInfo.State = CreatureState.Skill;
-                S_Skill resSkillPacket = new S_Skill();
-                resSkillPacket.PlayerId = player.Info.PlayerId;
-                resSkillPacket.SkillInfo.SkillId = 1;
-                
+                var resSkillPacket = new S_Skill
+                {
+                    PlayerId = player.Info.PlayerId,
+                    Info = new SkillInfo
+                    {
+                        SkillId = 1
+                    }
+                };
+
                 Broadcast(resSkillPacket);
                 
                 // TODO : 데미지 판정

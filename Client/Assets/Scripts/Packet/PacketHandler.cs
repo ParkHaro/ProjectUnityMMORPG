@@ -46,8 +46,6 @@ class PacketHandler
     public static void S_MoveHandler(PacketSession session, IMessage packet)
     {
         S_Move movePacket = packet as S_Move;
-        ServerSession serverSession = session as ServerSession;
-
         var go = Managers.Object.FindById(movePacket.PlayerId);
         if (go == null)
         {
@@ -61,5 +59,22 @@ class PacketHandler
         }
         
         creatureController.PosInfo = movePacket.PosInfo;
+    }
+
+    public static void S_SkillHandler(PacketSession session, IMessage packet)
+    {
+        S_Skill skillPacket = packet as S_Skill;
+        
+        var go = Managers.Object.FindById(skillPacket.PlayerId);
+        if (go == null)
+        {
+            return;
+        }
+        
+        var playerController = go.GetComponent<PlayerController>();
+        if (playerController != null)
+        {
+            playerController.UseSkill(skillPacket.Info.SkillId);
+        }
     }
 }
