@@ -30,49 +30,4 @@ public class ArrowController : CreatureController
     protected override void UpdateAnimation()
     {
     }
-
-    protected override void MoveToNextPos()
-    {
-        Vector3Int destPos = CellPos;
-
-        switch (Dir)
-        {
-            case MoveDir.Up:
-                destPos += Vector3Int.up;
-                break;
-            case MoveDir.Down:
-                destPos += Vector3Int.down;
-                break;
-            case MoveDir.Left:
-                destPos += Vector3Int.left;
-                break;
-            case MoveDir.Right:
-                destPos += Vector3Int.right;
-                break;
-        }
-
-        State = CreatureState.Moving;
-        if (Managers.Map.CanGo(destPos))
-        {
-            var go = Managers.Object.Find(destPos);
-            if (go == null)
-            {
-                CellPos = destPos;
-            }
-            else
-            {
-                var target = go.GetComponent<CreatureController>();
-                if (target != null)
-                {
-                    target.OnDamaged();
-                }
-
-                Managers.Resource.Destroy(gameObject);
-            }
-        }
-        else
-        {
-            Managers.Resource.Destroy(gameObject);
-        }
-    }
 }

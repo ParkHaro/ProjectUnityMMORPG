@@ -43,7 +43,7 @@ public class MyPlayerController : PlayerController
             {
                 Info = new SkillInfo
                 {
-                    SkillId = 1
+                    SkillId = 2
                 }
             };
             Managers.Network.Send(skillPacket);

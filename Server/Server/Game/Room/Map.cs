@@ -71,7 +71,7 @@ namespace Server.Game
 
         private bool[,] _collisions;
 
-        private Player[,] _players;
+        private GameObject[,] _objects;
 
         public bool CanGo(Vector2Int cellPos, bool isCheckObjects = true)
         {
@@ -87,10 +87,10 @@ namespace Server.Game
 
             var x = cellPos.x - MinX;
             var y = MaxY - cellPos.y;
-            return !_collisions[y, x] && (!isCheckObjects || _players[y, x] == null);
+            return !_collisions[y, x] && (!isCheckObjects || _objects[y, x] == null);
         }
 
-        public Player Find(Vector2Int cellPos)
+        public GameObject Find(Vector2Int cellPos)
         {
             if(cellPos.x < MinX || cellPos.x > MaxX)
             {
@@ -103,12 +103,12 @@ namespace Server.Game
             
             var x = cellPos.x - MinX;
             var y = MaxY - cellPos.y;
-            return _players[y, x];
+            return _objects[y, x];
         }
 
-        public bool ApplyMove(Player player, Vector2Int destPos)
+        public bool ApplyLeave(GameObject gameObject)
         {
-            var posInfo = player.Info.PosInfo;
+            var posInfo = gameObject.Info.PosInfo;
             if (posInfo.PosX < MinX || posInfo.PosX > MaxX)
             {
                 return false;
@@ -118,25 +118,31 @@ namespace Server.Game
             {
                 return false;
             }
+            
+            var x = posInfo.PosX - MinX;
+            var y = MaxY - posInfo.PosY;
+            if (_objects[y, x] == gameObject)
+            {
+                _objects[y, x] = null;
+            }
 
+            return true;
+        }
+
+        public bool ApplyMove(Player gameObject, Vector2Int destPos)
+        {
+            ApplyLeave(gameObject);
+            
+            var posInfo = gameObject.Info.PosInfo;
             if (CanGo(destPos, true) == false)
             {
                 return false;
             }
 
             {
-                var x = posInfo.PosX - MinX;
-                var y = MaxY - posInfo.PosY;
-                if (_players[y, x] == player)
-                {
-                    _players[y, x] = null;
-                }
-            }
-
-            {
                 var x = destPos.x - MinX;
                 var y = MaxY - destPos.y;
-                _players[y, x] = player;
+                _objects[y, x] = gameObject;
             }
 
             posInfo.PosX = destPos.x;
@@ -160,7 +166,7 @@ namespace Server.Game
             var xCount = MaxX - MinX + 1;
             var yCount = MaxY - MinY + 1;
             _collisions = new bool[yCount, xCount];
-            _players = new Player[yCount, xCount];
+            _objects = new GameObject[yCount, xCount];
 
             for (var y = 0; y < yCount; y++)
             {

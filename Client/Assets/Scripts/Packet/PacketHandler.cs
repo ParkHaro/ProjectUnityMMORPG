@@ -23,19 +23,19 @@ class PacketHandler
     {
         Debug.Log("Spawn");
         S_Spawn spawnPacket = packet as S_Spawn;
-        Debug.Log($"SpawnPacket Players Count : {spawnPacket.Players.Count}");
-        foreach (var player in spawnPacket.Players)
+        Debug.Log($"SpawnPacket Players Count : {spawnPacket.Objects.Count}");
+        foreach (var obj in spawnPacket.Objects)
         {
-            Managers.Object.Add(player, isMyPlayer: false);
+            Managers.Object.Add(obj, isMyPlayer: false);
         }
 
-        Debug.Log($"{nameof(S_SpawnHandler)} / {spawnPacket.Players}");
+        Debug.Log($"{nameof(S_SpawnHandler)} / {spawnPacket.Objects}");
     }
 
     public static void S_DespawnHandler(PacketSession session, IMessage packet)
     {
         S_Despawn despawnPacket = packet as S_Despawn;
-        foreach (var playerId in despawnPacket.PlayerIds)
+        foreach (var playerId in despawnPacket.ObjectIds)
         {
             Managers.Object.Remove(playerId);
         }
@@ -46,7 +46,7 @@ class PacketHandler
     public static void S_MoveHandler(PacketSession session, IMessage packet)
     {
         S_Move movePacket = packet as S_Move;
-        var go = Managers.Object.FindById(movePacket.PlayerId);
+        var go = Managers.Object.FindById(movePacket.ObjectId);
         if (go == null)
         {
             return;
@@ -65,7 +65,7 @@ class PacketHandler
     {
         S_Skill skillPacket = packet as S_Skill;
         
-        var go = Managers.Object.FindById(skillPacket.PlayerId);
+        var go = Managers.Object.FindById(skillPacket.ObjectId);
         if (go == null)
         {
             return;
