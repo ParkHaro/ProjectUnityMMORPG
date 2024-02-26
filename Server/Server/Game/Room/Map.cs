@@ -53,6 +53,15 @@ namespace Server.Game
         {
             return new Vector2Int(a.x + b.x, a.y + b.y);
         }
+
+        public static Vector2Int operator -(Vector2Int a, Vector2Int b)
+        {
+            return new Vector2Int(a.x - b.x, a.y - b.y);
+        }
+
+        public float magnitude => (float)Math.Sqrt(sqrMagnitude);
+        public int sqrMagnitude => x * x + y * y;
+        public int cellDistFromZero => Math.Abs(x) + Math.Abs(y);
     }
 
     public class Map
@@ -92,15 +101,16 @@ namespace Server.Game
 
         public GameObject Find(Vector2Int cellPos)
         {
-            if(cellPos.x < MinX || cellPos.x > MaxX)
+            if (cellPos.x < MinX || cellPos.x > MaxX)
             {
                 return null;
             }
-            if(cellPos.y < MinY || cellPos.y > MaxY)
+
+            if (cellPos.y < MinY || cellPos.y > MaxY)
             {
                 return null;
             }
-            
+
             var x = cellPos.x - MinX;
             var y = MaxY - cellPos.y;
             return _objects[y, x];
@@ -118,7 +128,7 @@ namespace Server.Game
             {
                 return false;
             }
-            
+
             var x = posInfo.PosX - MinX;
             var y = MaxY - posInfo.PosY;
             if (_objects[y, x] == gameObject)
@@ -132,7 +142,7 @@ namespace Server.Game
         public bool ApplyMove(GameObject gameObject, Vector2Int destPos)
         {
             ApplyLeave(gameObject);
-            
+
             var posInfo = gameObject.Info.PosInfo;
             if (CanGo(destPos, true) == false)
             {
@@ -190,7 +200,7 @@ namespace Server.Game
         private int[] _cost = { 10, 10, 10, 10 };
 
         public List<Vector2Int> FindPath(Vector2Int startCellPos, Vector2Int destCellPos,
-            bool ignoreDestCollision = false)
+            bool isCheckObjects = true)
         {
             var path = new List<Pos>();
 
@@ -251,9 +261,9 @@ namespace Server.Game
 
                     // 유효 범위를 벗어났으면 스킵
                     // 벽으로 막혀서 갈 수 없으면 스킵
-                    if (!ignoreDestCollision || next.Y != dest.Y || next.X != dest.X)
+                    if (next.Y != dest.Y || next.X != dest.X)
                     {
-                        if (CanGo(Pos2Cell(next)) == false) // CellPos
+                        if (CanGo(Pos2Cell(next), isCheckObjects) == false) // CellPos
                         {
                             continue;
                         }

@@ -68,10 +68,10 @@ class PacketHandler
             return;
         }
         
-        var playerController = go.GetComponent<PlayerController>();
-        if (playerController != null)
+        var creatureController = go.GetComponent<CreatureController>();
+        if (creatureController != null)
         {
-            playerController.UseSkill(skillPacket.Info.SkillId);
+            creatureController.UseSkill(skillPacket.Info.SkillId);
         }
     }
 

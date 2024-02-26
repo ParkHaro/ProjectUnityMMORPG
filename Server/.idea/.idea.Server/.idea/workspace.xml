@@ -9,27 +9,18 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="68446bd3-46d0-4979-8da5-ce7637443a77" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/../Client/Assets/Scripts/Contents/HpBar.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../Client/Assets/Scripts/Contents/HpBar.cs.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../Client/Assets/Scripts/Controllers/BaseController.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../Client/Assets/Scripts/Controllers/BaseController.cs.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Client/Assets/Scripts/Controllers/ArrowController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Client/Assets/Scripts/Controllers/ArrowController.cs" afterDir="false" />
+    <list default="true" id="68446bd3-46d0-4979-8da5-ce7637443a77" name="Changes" comment="Implement Hp and Dead">
+      <change beforePath="$PROJECT_DIR$/../Client/Assets/Scripts/Controllers/BaseController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Client/Assets/Scripts/Controllers/BaseController.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Client/Assets/Scripts/Controllers/CreatureController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Client/Assets/Scripts/Controllers/CreatureController.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Client/Assets/Scripts/Controllers/MonsterController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Client/Assets/Scripts/Controllers/MonsterController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Client/Assets/Scripts/Controllers/PlayerController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Client/Assets/Scripts/Controllers/PlayerController.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Client/Assets/Scripts/Managers/Contents/ObjectManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Client/Assets/Scripts/Managers/Contents/ObjectManager.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Client/Assets/Scripts/Packet/ClientPacketManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Client/Assets/Scripts/Packet/ClientPacketManager.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Client/Assets/Scripts/Packet/PacketHandler.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Client/Assets/Scripts/Packet/PacketHandler.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Client/Assets/Scripts/Packet/Protocol.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Client/Assets/Scripts/Packet/Protocol.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Client/ProjectSettings/TagManager.asset" beforeDir="false" afterPath="$PROJECT_DIR$/../Client/ProjectSettings/TagManager.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Common/protoc-25.0-win64/bin/ClientPacketManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Common/protoc-25.0-win64/bin/ClientPacketManager.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Common/protoc-25.0-win64/bin/Protocol.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Common/protoc-25.0-win64/bin/Protocol.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Common/protoc-25.0-win64/bin/Protocol.proto" beforeDir="false" afterPath="$PROJECT_DIR$/../Common/protoc-25.0-win64/bin/Protocol.proto" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Server/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Server/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Server/Game/Object/GameObject.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Server/Game/Object/GameObject.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Server/Game/Object/Monster.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Server/Game/Object/Monster.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Server/Game/Room/GameRoom.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Server/Game/Room/GameRoom.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Server/Game/Room/Map.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Server/Game/Room/Map.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Server/Packet/Protocol.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Server/Packet/Protocol.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -49,19 +40,20 @@
     <setting file="file://$USER_HOME$/Downloads/Protobuf+이식_소스코드/Server/Server/Packet/ServerPacketManager.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../Client/Assets/Scripts/Controllers/ArrowController.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock://C:/Users/haro7/Projects/Portfolio/ProjectUnityMMORPG/Client/Assets/Scripts/Controllers/ArrowController.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock://C:/Users/haro7/Projects/Portfolio/ProjectUnityMMORPG/Client/Assets/Scripts/Controllers/CreatureController.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://C:/Users/haro7/Projects/Portfolio/ProjectUnityMMORPG/Client/Assets/Scripts/Controllers/ArrowController.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock://C:/Users/haro7/Projects/Portfolio/ProjectUnityMMORPG/Client/Assets/Scripts/Controllers/CreatureController.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../Client/Assets/Scripts/Controllers/CreatureController.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://C:/Users/haro7/Projects/Portfolio/ProjectUnityMMORPG/Client/Assets/Scripts/Controllers/CreatureController.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../Client/Assets/Scripts/Controllers/MyPlayerController.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock://C:/Users/haro7/Projects/Portfolio/ProjectUnityMMORPG/Client/Assets/Scripts/Controllers/MyPlayerController.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock://C:/Users/haro7/Projects/Portfolio/ProjectUnityMMORPG/Client/Assets/Scripts/Packet/ClientPacketManager.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../Client/Assets/Scripts/Packet/ClientPacketManager.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://C:/Users/haro7/Projects/Portfolio/ProjectUnityMMORPG/Client/Assets/Scripts/Packet/ClientPacketManager.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock://C:/Users/haro7/Projects/Portfolio/ProjectUnityMMORPG/Client/Assets/Scripts/Packet/PacketHandler.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../Client/Assets/Scripts/Packet/PacketHandler.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock://C:/Users/haro7/Projects/Portfolio/ProjectUnityMMORPG/Client/Assets/Scripts/Packet/PacketHandler.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock://C:/Users/haro7/Projects/Portfolio/ProjectUnityMMORPG/Common/protoc-25.0-win64/bin/ClientPacketManager.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock://C:/Users/haro7/Projects/Portfolio/ProjectUnityMMORPG/Common/protoc-25.0-win64/bin/ClientPacketManager.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../Common/protoc-25.0-win64/bin/ClientPacketManager.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://C:/Users/haro7/Projects/Portfolio/ProjectUnityMMORPG/Common/protoc-25.0-win64/bin/ClientPacketManager.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://C:/Users/haro7/Projects/Portfolio/ProjectUnityMMORPG/Common/protoc-25.0-win64/bin/ClientPacketManager.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock://C:/Users/haro7/Projects/Portfolio/ProjectUnityMMORPG/Common/protoc-25.0-win64/bin/ClientPacketManager.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock://C:/Users/haro7/Projects/Portfolio/ProjectUnityMMORPG/Server/PacketGenerator/PacketFormat.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock://C:/Users/haro7/Projects/Portfolio/ProjectUnityMMORPG/Server/Server/Game/GameRoom.cs" root0="SKIP_HIGHLIGHTING" />
@@ -238,7 +230,15 @@
       <option name="project" value="LOCAL" />
       <updated>1708893583872</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="Implement Hp and Dead">
+      <option name="closed" value="true" />
+      <created>1708960204562</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1708960204562</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -266,6 +266,7 @@
     <MESSAGE value="add skill json" />
     <MESSAGE value="Implement Stat" />
     <MESSAGE value="Apply Damage" />
-    <option name="LAST_COMMIT_MESSAGE" value="Apply Damage" />
+    <MESSAGE value="Implement Hp and Dead" />
+    <option name="LAST_COMMIT_MESSAGE" value="Implement Hp and Dead" />
   </component>
 </project>
