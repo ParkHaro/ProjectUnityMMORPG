@@ -38,6 +38,7 @@ public class MonsterController : CreatureController
     protected override void Init()
     {
         base.Init();
+        
         State = CreatureState.Idle;
         Dir = MoveDir.Down;
 
@@ -99,7 +100,7 @@ public class MonsterController : CreatureController
         var moveCellDir = nextPos - CellPos;
         Dir = GetDirFromVec(moveCellDir);
 
-        if (Managers.Map.CanGo(nextPos) && Managers.Object.Find(nextPos) == null)
+        if (Managers.Map.CanGo(nextPos) && Managers.Object.FindCreature(nextPos) == null)
         {
             CellPos = nextPos;
         }
@@ -111,12 +112,6 @@ public class MonsterController : CreatureController
 
     public override void OnDamaged()
     {
-        base.OnDamaged();
-        var effect = Managers.Resource.Instantiate("Effect/DieEffect");
-        effect.transform.position = gameObject.transform.position;
-        effect.GetComponent<Animator>().Play("Start");
-        Destroy(effect, 0.5f);
-
         Managers.Object.Remove(Id);
         Managers.Resource.Destroy(gameObject);
     }
@@ -132,7 +127,7 @@ public class MonsterController : CreatureController
             var yRange = Random.Range(-5, 6);
             var randPos = CellPos + new Vector3Int(xRange, yRange, 0);
 
-            if (Managers.Map.CanGo(randPos) && Managers.Object.Find(randPos) == null)
+            if (Managers.Map.CanGo(randPos) && Managers.Object.FindCreature(randPos) == null)
             {
                 destCellPos = randPos;
                 State = CreatureState.Moving;
@@ -175,7 +170,7 @@ public class MonsterController : CreatureController
 
     private IEnumerator CoStartPunch()
     {
-        var go = Managers.Object.Find(GetFrontCellPos());
+        var go = Managers.Object.FindCreature(GetFrontCellPos());
         if (go != null)
         {
             var creatureController = go.GetComponent<CreatureController>();

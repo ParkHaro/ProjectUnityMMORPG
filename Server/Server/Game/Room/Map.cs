@@ -129,7 +129,7 @@ namespace Server.Game
             return true;
         }
 
-        public bool ApplyMove(Player gameObject, Vector2Int destPos)
+        public bool ApplyMove(GameObject gameObject, Vector2Int destPos)
         {
             ApplyLeave(gameObject);
             

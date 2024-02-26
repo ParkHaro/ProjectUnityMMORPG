@@ -71,7 +71,7 @@ namespace Server.Game
 
         public virtual void OnDamaged(GameObject attacker, int damage)
         {
-            Stat.Hp -= Math.Max(Stat.Hp - damage, 0);
+            Stat.Hp = Math.Max(Stat.Hp - damage, 0);
 
             var changeHpPacket = new S_ChangeHp();
             changeHpPacket.ObjectId = Id;
@@ -86,7 +86,21 @@ namespace Server.Game
         
         public virtual void OnDead(GameObject attacker)
         {
+            S_Die diePacket = new S_Die();
+            diePacket.ObjectId = Id;
+            diePacket.AttackerId = attacker.Id;
+            Room.Broadcast(diePacket);
+
+            var room = Room;
+            room.LeaveGame(Id);
+
+            Stat.Hp = Stat.MaxHp;
+            PosInfo.State = CreatureState.Idle;
+            PosInfo.MoveDir = MoveDir.Down;
+            PosInfo.PosX = 0;
+            PosInfo.PosY = 0;
             
+            room.EnterGame(this);
         }
     }
 }
