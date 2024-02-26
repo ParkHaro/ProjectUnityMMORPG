@@ -8,7 +8,7 @@ namespace Server.Game
         public GameObject Owner { get; set; }
 
         private long _nextMoveTick = 0;
-        
+
         public override void Update()
         {
             if (Data == null || Data.projectile == null || Owner == null || Room == null)
@@ -28,7 +28,7 @@ namespace Server.Game
             if (Room.Map.CanGo(destPos))
             {
                 CellPos = destPos;
-                
+
                 var movePacket = new S_Move();
                 movePacket.ObjectId = Id;
                 movePacket.PosInfo = PosInfo;
@@ -43,8 +43,8 @@ namespace Server.Game
                 {
                     target.OnDamaged(this, Data.damage + Owner.Stat.Attack);
                 }
-                
-                Room.LeaveGame(Id);
+
+                Room.Push(Room.LeaveGame, Id);
             }
         }
     }

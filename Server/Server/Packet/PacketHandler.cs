@@ -2,7 +2,6 @@
 using Google.Protobuf;
 using Google.Protobuf.Protocol;
 using Server;
-using Server.Game;
 using ServerCore;
 
 class PacketHandler
@@ -27,14 +26,14 @@ class PacketHandler
             return;
         }
 
-        room.HandleMove(player, movePacket);
+        room.Push(room.HandleMove, player, movePacket);
     }
 
     public static void C_SkillHandler(PacketSession session, IMessage packet)
     {
         C_Skill skillPacket = packet as C_Skill;
         ClientSession clientSession = session as ClientSession;
-        
+
         var player = clientSession.MyPlayer;
         if (player == null)
         {
@@ -47,6 +46,6 @@ class PacketHandler
             return;
         }
 
-        room.HandleSkill(player, skillPacket);
+        room.Push(room.HandleSkill, player, skillPacket);
     }
 }

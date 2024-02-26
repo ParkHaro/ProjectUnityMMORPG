@@ -12,7 +12,7 @@ namespace Server.Game
             get => Info.ObjectId;
             set => Info.ObjectId = value;
         }
-        
+
         public GameRoom Room { get; set; }
 
         public ObjectInfo Info { get; set; } = new ObjectInfo() { PosInfo = new PositionInfo() };
@@ -24,7 +24,7 @@ namespace Server.Game
             get => Stat.Speed;
             set => Stat.Speed = value;
         }
-        
+
         public int Hp
         {
             get => Stat.Hp;
@@ -42,7 +42,7 @@ namespace Server.Game
             get => PosInfo.State;
             set => PosInfo.State = value;
         }
-        
+
         public GameObject()
         {
             Info.PosInfo = PosInfo;
@@ -51,9 +51,8 @@ namespace Server.Game
 
         public virtual void Update()
         {
-            
         }
-        
+
         public Vector2Int CellPos
         {
             get => new Vector2Int(PosInfo.PosX, PosInfo.PosY);
@@ -68,7 +67,7 @@ namespace Server.Game
         {
             return GetFrontCellPos(PosInfo.MoveDir);
         }
-        
+
         public Vector2Int GetFrontCellPos(MoveDir dir)
         {
             var cellPos = CellPos;
@@ -91,7 +90,7 @@ namespace Server.Game
 
             return cellPos;
         }
-        
+
         public static MoveDir GetDirFromVec(Vector2Int dir)
         {
             if (dir.x > 0)
@@ -119,21 +118,31 @@ namespace Server.Game
 
         public virtual void OnDamaged(GameObject attacker, int damage)
         {
+            if (Room == null)
+            {
+                return;
+            }
+            
             Stat.Hp = Math.Max(Stat.Hp - damage, 0);
 
             var changeHpPacket = new S_ChangeHp();
             changeHpPacket.ObjectId = Id;
             changeHpPacket.Hp = Stat.Hp;
             Room.Broadcast(changeHpPacket);
-            
+
             if (Stat.Hp <= 0)
             {
                 OnDead(attacker);
             }
         }
-        
+
         public virtual void OnDead(GameObject attacker)
         {
+            if (Room == null)
+            {
+                return;
+            }
+            
             S_Die diePacket = new S_Die();
             diePacket.ObjectId = Id;
             diePacket.AttackerId = attacker.Id;
@@ -147,7 +156,7 @@ namespace Server.Game
             PosInfo.MoveDir = MoveDir.Down;
             PosInfo.PosX = 0;
             PosInfo.PosY = 0;
-            
+
             room.EnterGame(this);
         }
     }

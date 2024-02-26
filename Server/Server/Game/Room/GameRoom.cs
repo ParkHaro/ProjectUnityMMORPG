@@ -6,9 +6,8 @@ using Server.Data;
 
 namespace Server.Game
 {
-    public class GameRoom
+    public class GameRoom : JobSerializer
     {
-        private object _lock = new object();
         public int RoomId { get; set; }
 
         private readonly Dictionary<int, Player> _players = new Dictionary<int, Player>();
@@ -20,26 +19,23 @@ namespace Server.Game
         public void Init(int mapId)
         {
             Map.LoadMap(mapId, "../../../../../Common/MapData");
-            
+
             // TODO TEMP
             var monster = ObjectManager.Instance.Add<Monster>();
             monster.CellPos = new Vector2Int(5, 5);
-            EnterGame(monster);
+            Push(EnterGame, monster);
         }
 
         public void Update()
         {
-            lock (_lock)
+            foreach (var monster in _monsters.Values)
             {
-                foreach (var monster in _monsters.Values)
-                {
-                    monster.Update();
-                }
+                monster.Update();
+            }
 
-                foreach (var projectile in _projectiles.Values)
-                {
-                    projectile.Update();
-                }
+            foreach (var projectile in _projectiles.Values)
+            {
+                projectile.Update();
             }
         }
 
@@ -52,69 +48,66 @@ namespace Server.Game
 
             var type = ObjectManager.GetObjectTypeById(gameObject.Id);
 
-            lock (_lock)
+            if (type == GameObjectType.Player)
             {
-                if (type == GameObjectType.Player)
+                Player newPlayer = gameObject as Player;
+                _players.Add(gameObject.Id, newPlayer);
+                newPlayer.Room = this;
+
+                Map.ApplyMove(newPlayer, new Vector2Int(newPlayer.CellPos.x, newPlayer.CellPos.y));
+
+                // 본인에게 정보 전송
                 {
-                    Player newPlayer = gameObject as Player;
-                    _players.Add(gameObject.Id, newPlayer);
-                    newPlayer.Room = this;
-                    
-                    Map.ApplyMove(newPlayer, new Vector2Int(newPlayer.CellPos.x, newPlayer.CellPos.y));
+                    var enterPacket = new S_EnterGame();
+                    enterPacket.Player = gameObject.Info;
+                    newPlayer.Session.Send(enterPacket);
 
-                    // 본인에게 정보 전송
-                    {
-                        var enterPacket = new S_EnterGame();
-                        enterPacket.Player = gameObject.Info;
-                        newPlayer.Session.Send(enterPacket);
-
-                        S_Spawn spawnPacket = new S_Spawn();
-                        foreach (var player in _players.Values)
-                        {
-                            if (gameObject != player)
-                            {
-                                spawnPacket.Objects.Add(player.Info);
-                            }
-                        }
-
-                        foreach (var monster in _monsters.Values)
-                        {
-                            spawnPacket.Objects.Add(monster.Info);
-                        }
-
-                        foreach (var projectile in _projectiles.Values)
-                        {
-                            spawnPacket.Objects.Add(projectile.Info);
-                        }
-
-                        newPlayer.Session.Send(spawnPacket);
-                    }
-                }
-                else if (type == GameObjectType.Monster)
-                {
-                    var monster = gameObject as Monster;
-                    _monsters.Add(gameObject.Id, monster);
-                    monster.Room = this;
-                    
-                    Map.ApplyMove(monster, new Vector2Int(monster.CellPos.x, monster.CellPos.y));
-                }
-                else if (type == GameObjectType.Projectile)
-                {
-                    var projectile = gameObject as Projectile;
-                    _projectiles.Add(gameObject.Id, projectile);
-                    projectile.Room = this;
-                }
-
-                // 다른 플레이어에게 정보 전송
-                {
-                    var spawnPacket = new S_Spawn();
-                    spawnPacket.Objects.Add(gameObject.Info);
+                    S_Spawn spawnPacket = new S_Spawn();
                     foreach (var player in _players.Values)
                     {
-                        if (player.Id != gameObject.Id)
+                        if (gameObject != player)
                         {
-                            player.Session.Send(spawnPacket);
+                            spawnPacket.Objects.Add(player.Info);
                         }
+                    }
+
+                    foreach (var monster in _monsters.Values)
+                    {
+                        spawnPacket.Objects.Add(monster.Info);
+                    }
+
+                    foreach (var projectile in _projectiles.Values)
+                    {
+                        spawnPacket.Objects.Add(projectile.Info);
+                    }
+
+                    newPlayer.Session.Send(spawnPacket);
+                }
+            }
+            else if (type == GameObjectType.Monster)
+            {
+                var monster = gameObject as Monster;
+                _monsters.Add(gameObject.Id, monster);
+                monster.Room = this;
+
+                Map.ApplyMove(monster, new Vector2Int(monster.CellPos.x, monster.CellPos.y));
+            }
+            else if (type == GameObjectType.Projectile)
+            {
+                var projectile = gameObject as Projectile;
+                _projectiles.Add(gameObject.Id, projectile);
+                projectile.Room = this;
+            }
+
+            // 다른 플레이어에게 정보 전송
+            {
+                var spawnPacket = new S_Spawn();
+                spawnPacket.Objects.Add(gameObject.Info);
+                foreach (var player in _players.Values)
+                {
+                    if (player.Id != gameObject.Id)
+                    {
+                        player.Session.Send(spawnPacket);
                     }
                 }
             }
@@ -124,57 +117,54 @@ namespace Server.Game
         {
             var type = ObjectManager.GetObjectTypeById(objectId);
 
-            lock (_lock)
+            if (type == GameObjectType.Player)
             {
-                if (type == GameObjectType.Player)
+                Player leavePlayer;
+                if (_players.Remove(objectId, out leavePlayer) == false)
                 {
-                    Player leavePlayer;
-                    if (_players.Remove(objectId, out leavePlayer) == false)
-                    {
-                        return;
-                    }
-
-                    leavePlayer.Room = null;
-                    Map.ApplyLeave(leavePlayer);
-
-                    // 본인에게 정보 전송
-                    {
-                        S_LeaveGame leavePacket = new S_LeaveGame();
-                        leavePlayer.Session.Send(leavePacket);
-                    }
-                }
-                else if (type == GameObjectType.Monster)
-                {
-                    Monster monster = null;
-                    if (_monsters.Remove(objectId, out monster) == false)
-                    {
-                        return;
-                    }
-
-                    monster.Room = null;
-                    Map.ApplyLeave(monster);
-                }
-                else if (type == GameObjectType.Projectile)
-                {
-                    Projectile projectile = null;
-                    if (_projectiles.Remove(objectId, out projectile) == false)
-                    {
-                        return;
-                    }
-
-                    projectile.Room = null;
+                    return;
                 }
 
-                // 다른 플레이어에게 정보 전송
+                Map.ApplyLeave(leavePlayer);
+                leavePlayer.Room = null;
+
+                // 본인에게 정보 전송
                 {
-                    S_Despawn despawnPacket = new S_Despawn();
-                    despawnPacket.ObjectIds.Add(objectId);
-                    foreach (var player in _players.Values)
+                    S_LeaveGame leavePacket = new S_LeaveGame();
+                    leavePlayer.Session.Send(leavePacket);
+                }
+            }
+            else if (type == GameObjectType.Monster)
+            {
+                Monster monster = null;
+                if (_monsters.Remove(objectId, out monster) == false)
+                {
+                    return;
+                }
+
+                monster.Room = null;
+                Map.ApplyLeave(monster);
+            }
+            else if (type == GameObjectType.Projectile)
+            {
+                Projectile projectile = null;
+                if (_projectiles.Remove(objectId, out projectile) == false)
+                {
+                    return;
+                }
+
+                projectile.Room = null;
+            }
+
+            // 다른 플레이어에게 정보 전송
+            {
+                S_Despawn despawnPacket = new S_Despawn();
+                despawnPacket.ObjectIds.Add(objectId);
+                foreach (var player in _players.Values)
+                {
+                    if (player.Id != objectId)
                     {
-                        if (player.Id != objectId)
-                        {
-                            player.Session.Send(despawnPacket);
-                        }
+                        player.Session.Send(despawnPacket);
                     }
                 }
             }
@@ -187,29 +177,26 @@ namespace Server.Game
                 return;
             }
 
-            lock (_lock)
+            // TODO : 검증
+            var movePosInfo = movePacket.PosInfo;
+            var info = player.Info;
+            if (movePosInfo.PosX != info.PosInfo.PosX || movePosInfo.PosY != info.PosInfo.PosY)
             {
-                // TODO : 검증
-                var movePosInfo = movePacket.PosInfo;
-                var info = player.Info;
-                if (movePosInfo.PosX != info.PosInfo.PosX || movePosInfo.PosY != info.PosInfo.PosY)
+                if (Map.CanGo(new Vector2Int(movePosInfo.PosX, movePosInfo.PosY)) == false)
                 {
-                    if (Map.CanGo(new Vector2Int(movePosInfo.PosX, movePosInfo.PosY)) == false)
-                    {
-                        return;
-                    }
+                    return;
                 }
-
-                info.PosInfo.State = movePosInfo.State;
-                info.PosInfo.MoveDir = movePosInfo.MoveDir;
-                Map.ApplyMove(player, new Vector2Int(movePosInfo.PosX, movePosInfo.PosY));
-
-                var resMovePacket = new S_Move();
-                resMovePacket.ObjectId = player.Info.ObjectId;
-                resMovePacket.PosInfo = movePacket.PosInfo;
-
-                Broadcast(resMovePacket);
             }
+
+            info.PosInfo.State = movePosInfo.State;
+            info.PosInfo.MoveDir = movePosInfo.MoveDir;
+            Map.ApplyMove(player, new Vector2Int(movePosInfo.PosX, movePosInfo.PosY));
+
+            var resMovePacket = new S_Move();
+            resMovePacket.ObjectId = player.Info.ObjectId;
+            resMovePacket.PosInfo = movePacket.PosInfo;
+
+            Broadcast(resMovePacket);
         }
 
         public void HandleSkill(Player player, C_Skill skillPacket)
@@ -220,68 +207,65 @@ namespace Server.Game
             }
 
             Console.WriteLine("HandleSkill");
-            lock (_lock)
+            var info = player.Info;
+            if (info.PosInfo.State != CreatureState.Idle)
             {
-                var info = player.Info;
-                if (info.PosInfo.State != CreatureState.Idle)
+                return;
+            }
+
+            // TODO : 스킬 사용 가능 여부 검증
+
+            info.PosInfo.State = CreatureState.Skill;
+            var resSkillPacket = new S_Skill
+            {
+                ObjectId = player.Info.ObjectId,
+                Info = new SkillInfo
                 {
-                    return;
+                    SkillId = skillPacket.Info.SkillId
                 }
+            };
+            Broadcast(resSkillPacket);
 
-                // TODO : 스킬 사용 가능 여부 검증
+            Skill skillData = null;
+            if (DataManager.SkillDict.TryGetValue(skillPacket.Info.SkillId, out skillData) == false)
+            {
+                return;
+            }
 
-                info.PosInfo.State = CreatureState.Skill;
-                var resSkillPacket = new S_Skill
+            Console.WriteLine("Use Skill : " + skillData.skillType);
+            switch (skillData.skillType)
+            {
+                case SkillType.SkillAuto:
                 {
-                    ObjectId = player.Info.ObjectId,
-                    Info = new SkillInfo
+                    // TODO : 데미지 판정
+                    var skillPos = player.GetFrontCellPos(info.PosInfo.MoveDir);
+                    var target = Map.Find(skillPos);
+                    if (target != null)
                     {
-                        SkillId = skillPacket.Info.SkillId
+                        Console.WriteLine("Hit GameObject !");
                     }
-                };
-                Broadcast(resSkillPacket);
-
-                Skill skillData = null;
-                if (DataManager.SkillDict.TryGetValue(skillPacket.Info.SkillId, out skillData) == false)
-                {
-                    return;
                 }
-
-                Console.WriteLine("Use Skill : " + skillData.skillType);
-                switch (skillData.skillType)
+                    break;
+                case SkillType.SkillProjectile:
                 {
-                    case SkillType.SkillAuto:
+                    // TODO : Arrow
+                    var arrow = ObjectManager.Instance.Add<Arrow>();
+                    if (arrow == null)
                     {
-                        // TODO : 데미지 판정
-                        var skillPos = player.GetFrontCellPos(info.PosInfo.MoveDir);
-                        var target = Map.Find(skillPos);
-                        if (target != null)
-                        {
-                            Console.WriteLine("Hit GameObject !");
-                        }
+                        return;
                     }
-                        break;
-                    case SkillType.SkillProjectile:
-                    {
-                        // TODO : Arrow
-                        var arrow = ObjectManager.Instance.Add<Arrow>();
-                        if (arrow == null)
-                        {
-                            return;
-                        }
 
-                        arrow.Owner = player;
-                        arrow.Data = skillData;
-                        
-                        arrow.PosInfo.State = CreatureState.Moving;
-                        arrow.PosInfo.MoveDir = info.PosInfo.MoveDir;
-                        arrow.PosInfo.PosX = info.PosInfo.PosX;
-                        arrow.PosInfo.PosY = info.PosInfo.PosY;
-                        arrow.Speed = skillData.projectile.speed;
-                        EnterGame(arrow);
-                    }
-                        break;
+                    arrow.Owner = player;
+                    arrow.Data = skillData;
+
+                    arrow.PosInfo.State = CreatureState.Moving;
+                    arrow.PosInfo.MoveDir = info.PosInfo.MoveDir;
+                    arrow.PosInfo.PosX = info.PosInfo.PosX;
+                    arrow.PosInfo.PosY = info.PosInfo.PosY;
+                    arrow.Speed = skillData.projectile.speed;
+                    Push(EnterGame, arrow);
                 }
+                    break;
             }
         }
 
@@ -300,12 +284,9 @@ namespace Server.Game
 
         public void Broadcast(IMessage packet)
         {
-            lock (_lock)
+            foreach (var player in _players.Values)
             {
-                foreach (var player in _players.Values)
-                {
-                    player.Session.Send(packet);
-                }
+                player.Session.Send(packet);
             }
         }
     }
