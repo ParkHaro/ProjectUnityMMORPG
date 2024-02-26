@@ -9,19 +9,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="68446bd3-46d0-4979-8da5-ce7637443a77" name="Changes" comment="Implement Monster SkillAI">
-      <change afterPath="$PROJECT_DIR$/Server/Game/Job/Job.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Server/Game/Job/JobSerializer.cs" afterDir="false" />
+    <list default="true" id="68446bd3-46d0-4979-8da5-ce7637443a77" name="Changes" comment="Implement JobQueue">
+      <change beforePath="$PROJECT_DIR$/../Client/Assets/Scripts/Managers/Contents/ObjectManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Client/Assets/Scripts/Managers/Contents/ObjectManager.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Client/Assets/Scripts/Packet/PacketHandler.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Client/Assets/Scripts/Packet/PacketHandler.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Server/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Server/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Server/Game/Object/Arrow.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Server/Game/Object/Arrow.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Server/Game/Object/GameObject.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Server/Game/Object/GameObject.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Server/Game/Job/JobSerializer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Server/Game/Job/JobSerializer.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Server/Game/Room/GameRoom.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Server/Game/Room/GameRoom.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Server/Game/Room/Map.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Server/Game/Room/Map.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Server/Game/Room/RoomManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Server/Game/Room/RoomManager.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Server/Packet/PacketHandler.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Server/Packet/PacketHandler.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Server/JobTimer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Server/Game/Job/JobTimer.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Server/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Server/Program.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Server/Session/ClientSession.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Server/Session/ClientSession.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ServerCore/JobQueue.cs" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -61,6 +56,7 @@
     <setting file="mock://C:/Users/haro7/Projects/Portfolio/ProjectUnityMMORPG/Common/protoc-25.0-win64/bin/ClientPacketManager.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock://C:/Users/haro7/Projects/Portfolio/ProjectUnityMMORPG/Server/PacketGenerator/PacketFormat.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock://C:/Users/haro7/Projects/Portfolio/ProjectUnityMMORPG/Server/Server/Game/GameRoom.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://C:/Users/haro7/Projects/Portfolio/ProjectUnityMMORPG/Server/Server/Game/Object/Arrow.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock://C:/Users/haro7/Projects/Portfolio/ProjectUnityMMORPG/Server/Server/Game/Object/Arrow.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock://C:/Users/haro7/Projects/Portfolio/ProjectUnityMMORPG/Server/Server/Game/Object/Arrow.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock://C:/Users/haro7/Projects/Portfolio/ProjectUnityMMORPG/Server/Server/Game/Object/Arrow.cs" root0="SKIP_HIGHLIGHTING" />
@@ -257,7 +253,15 @@
       <option name="project" value="LOCAL" />
       <updated>1708970849811</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="Implement JobQueue">
+      <option name="closed" value="true" />
+      <created>1708974527646</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1708974527646</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -287,6 +291,7 @@
     <MESSAGE value="Apply Damage" />
     <MESSAGE value="Implement Hp and Dead" />
     <MESSAGE value="Implement Monster SkillAI" />
-    <option name="LAST_COMMIT_MESSAGE" value="Implement Monster SkillAI" />
+    <MESSAGE value="Implement JobQueue" />
+    <option name="LAST_COMMIT_MESSAGE" value="Implement JobQueue" />
   </component>
 </project>

@@ -64,6 +64,7 @@ public class ObjectManager
             
             var arrowController = go.GetComponent<ArrowController>();
             arrowController.Stat = info.StatInfo;
+            arrowController.PosInfo = info.PosInfo;
             arrowController.SyncPos();
         }
     }

@@ -48,6 +48,11 @@ class PacketHandler
         {
             return;
         }
+
+        if (Managers.Object.MyPlayer.Id == movePacket.ObjectId)
+        {
+            return;
+        }
         
         var baseController = go.GetComponent<BaseController>();
         if (baseController == null)

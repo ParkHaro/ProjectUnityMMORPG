@@ -1,27 +1,37 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Threading;
 using Server.Data;
 using Server.Game;
 using ServerCore;
+using Timer = System.Timers.Timer;
 
 namespace Server
 {
 	class Program
 	{
-		static Listener _listener = new Listener();
+		private static Listener _listener = new Listener();
+		private static List<Timer> _timers = new List<Timer>();
 
-		static void FlushRoom()
+		private static void TickRoom(GameRoom room, int tick = 100)
 		{
-			JobTimer.Instance.Push(FlushRoom, 250);
+			var timer = new Timer();
+			timer.Interval = tick;
+			timer.Elapsed += ((s, e) => room.Update());
+			timer.AutoReset = true;
+			timer.Enabled = true;
+			
+			_timers.Add(timer);
 		}
-
-		static void Main(string[] args)
+		
+		private static void Main(string[] args)
 		{
 			ConfigManager.LoadConfig();
 			DataManager.LoadData();
 			
-			RoomManager.Instance.Add(1);
+			var gameRoom = RoomManager.Instance.Add(1);
+			TickRoom(gameRoom, 30);
 			
 			// DNS (Domain Name System)
 			string host = Dns.GetHostName();
@@ -33,15 +43,10 @@ namespace Server
 			Console.WriteLine("Listening...");
 
 			//FlushRoom();
-			JobTimer.Instance.Push(FlushRoom);
 
 			while (true)
 			{
-				// JobTimer.Instance.Flush();
-
-				var room = RoomManager.Instance.Find(1);
-				room.Push(room.Update);
-				// Thread.Sleep(100);
+				Thread.Sleep(100);
 			}
 		}
 	}

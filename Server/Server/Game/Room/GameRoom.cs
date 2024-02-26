@@ -23,9 +23,9 @@ namespace Server.Game
             // TODO TEMP
             var monster = ObjectManager.Instance.Add<Monster>();
             monster.CellPos = new Vector2Int(5, 5);
-            Push(EnterGame, monster);
+            EnterGame(monster);
         }
-
+        
         public void Update()
         {
             foreach (var monster in _monsters.Values)
@@ -37,6 +37,8 @@ namespace Server.Game
             {
                 projectile.Update();
             }
+
+            Flush();
         }
 
         public void EnterGame(GameObject gameObject)
@@ -142,8 +144,8 @@ namespace Server.Game
                     return;
                 }
 
-                monster.Room = null;
                 Map.ApplyLeave(monster);
+                monster.Room = null;
             }
             else if (type == GameObjectType.Projectile)
             {
